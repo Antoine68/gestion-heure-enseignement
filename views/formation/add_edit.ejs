@@ -1,0 +1,63 @@
+<% layout("template.ejs") %>
+    <div class="text-content">
+        <% if (typeof errors !== "undefined") { %>
+            <article class="message is-danger">
+              <div class="message-header">
+                <p>Erreurs dans le formulaire</p>
+              </div>
+              <div class="message-body message-errors">
+                Veuillez verifier les champs suivants:
+                <ul>
+                  <% for (let i=0; i < errors.length; i++) { %>	
+                    <li><%= errors[i].msg%></li>
+                  <%}%>
+                  </ul>                
+              </div>
+            </article>
+        <%}%>
+        <form action="<%= action _%>?_method=PUT" method="POST">
+            <div class="field">
+                <label class="label" for="name">Nom</label>
+                <p class="control has-icons-left has-icons-right">
+                <input class="input" id="name" name="name" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.name _%><% }else if(typeof formation !== "undefined"){ %><%= formation.name _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+              <div class="field">
+                <label class="label" for="nickname">Surnom</label>
+                <p class="control has-icons-left">
+                  <input class="input" id="nickname" name="nickname" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.nickname _%><% } else if(typeof formation!== "undefined"){ %><%= formation.nickname _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+            <% if(typeof decompositions !== "undefined" ){ %> 
+                <div class="field">
+                    <label class="label" for="decomposition">Décomposition</label>
+                    <div class="control has-icons-left">
+                        <div class="select">
+                            <select id="decomposition" name="decomposition">
+                                <% for (let i=0; i < decompositions.length; i++) { %>	
+                                    <option value="<%= decompositions[i]._id %>" <% if(typeof old !== "undefined" && old.decomposition === decompositions[i]._id.toString() ){ %> <%= "selected" _%> <% } %>><%= decompositions[i].name %></option>
+                                <% } %> 
+                            </select>
+                        </div>
+                        <span class="icon is-left">
+                            <i class="fas fa-list"></i>
+                        </span>
+                    </div>
+                </div>
+            <% } %> 
+              <div class="field is-grouped is-grouped-centered">
+                <p class="control">
+                    <a href="/projets" class="button is-light">Annuler</a>
+                </p>
+                <p class="control">
+                    <input type="submit" class="button is-primary" value="Valider">
+                </p>
+              </div>
+        </form>
+    </div>

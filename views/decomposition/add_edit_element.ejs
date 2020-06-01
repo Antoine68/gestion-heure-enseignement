@@ -1,0 +1,117 @@
+<% layout("template.ejs") %>
+    <div class="text-content">
+        <% if (typeof errors !== "undefined") { %>
+            <article class="message is-danger">
+              <div class="message-header">
+                <p>Erreurs dans le formulaire</p>
+              </div>
+              <div class="message-body message-errors">
+                Veuillez verifier les champs suivants:
+                <ul>
+                  <% for (let i=0; i < errors.length; i++) { %>	
+                    <li><%= errors[i].msg%></li>
+                  <%}%>
+                  </ul>                
+              </div>
+            </article>
+        <%}%>
+        <form action="<%= action _%>?_method=PUT" method="POST">
+            <div class="field">
+                <label class="label" for="title">Titre</label>
+                <p class="control has-icons-left has-icons-right">
+                <input class="input" id="title" name="title" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.title _%><% }else if(typeof element !== "undefined"){ %><%= element.title _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+              <div class="field">
+                <label class="label" for="nickname">Surnom</label>
+                <p class="control has-icons-left">
+                  <input class="input" id="nickname" name="nickname" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.nickname _%><% } else if(typeof element !== "undefined"){ %><%= element.nickname _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+              <div class="field">
+                <label class="label" for="reference">Référence</label>
+                <p class="control has-icons-left">
+                  <input class="input" id="reference" name="reference" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.reference _%><% } else if(typeof element !== "undefined"){ %><%= element.reference _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+              <div class="field">
+                <label class="label" for="order">Ordre dans la hiérarchie</label>
+                <p class="control has-icons-left">
+                  <input class="input" id="order" name="order" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.order _%><% } else if(typeof element !== "undefined"){ %><%= element.order _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-sort-numeric-up"></i>
+                  </span>
+                </p>
+              </div>
+            <div class="field">
+                <label class="label">Volume d'heures prévu</label>
+                <div class="separator">
+                    <div>
+                        <label for="tp_hour">TP:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="tp_hour" name="tp_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.tp_hour _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.TP _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div>
+                        <label for="td_hour">TD:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="td_hour" name="td_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.td_hour _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.TD _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div>
+                        <label for="cm_hour">CM:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="cm_hour" name="cm_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.cm_hour _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.CM _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>         
+              <% if(hierarchy){ %> 
+                <div class="field">
+                        <label class="label" for="parent">Parent</label>
+                        <div class="control has-icons-left">
+                            <div class="select">
+                            <select id="parent" name="parent">
+                                <option value="<%= root._id %>" <% if(typeof old !== "undefined" && old.parent === root._id.toString() ){ %> <%= "selected" _%> <% }else if(typeof element !== "undefined" && element.parent._id.toString() === root._id.toString()){ %> <%= "selected" _%><% }else if(typeof parent !== "undefined" && parent._id.toString() === root._id.toString()){ %> <%= "selected" _%> <% } %>><%= root.title %></option>
+                                <% for (let i=0; i < elements.length; i++) { %>	
+                                    <% if(! (typeof element !== "undefined" && element._id.toString() === elements[i]._id.toString())){ %>
+                                        <option value="<%= elements[i]._id %>" <% if(typeof old !== "undefined" && old.parent === elements[i]._id.toString() ){ %> <%= "selected" _%> <% }else if(typeof element !== "undefined" && element.parent._id.toString() === elements[i]._id.toString()){ %> <%= "selected" _%><% }else if(typeof parent !== "undefined" && parent._id.toString() === elements[i]._id.toString()){ %> <%= "selected" _%> <% } %>><%= elements[i].title %></option>
+                                    <%}%>
+                                <% } %> 
+                            </select>
+                            </div>
+                            <span class="icon is-left">
+                            <i class="fas fa-list"></i>
+                            </span>
+                        </div>
+                </div>
+            <% } %> 
+              <div class="field is-grouped is-grouped-centered">
+                <p class="control">
+                    <a href="/decompositions/afficher/<%= idDecomposition _%>" class="button is-light">Annuler</a>
+                </p>
+                <p class="control">
+                    <input type="submit" class="button is-primary" value="Valider">
+                </p>
+              </div>
+        </form>
+    </div>
+

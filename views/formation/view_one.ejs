@@ -1,0 +1,25 @@
+<% layout("template.ejs") %>
+    <div id="element-modal" class="modal">
+        <div class="modal-background" onclick="closeModals()"></div>
+        <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Informations</p>
+            <button class="delete" aria-label="close" onclick="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="content">
+                
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button" onclick="closeModals()">Annuler</button>
+            <div class="link-container">
+            </div>
+        </footer>
+        </div>
+    </div>
+    <input type="hidden" id="formation-id" value="<%= formation._id %>">
+    <div class="has-text-centered"><h2 class="title pointer" id="root-table"></h2></div>
+    <div class="tables table-container tables-content"></div>
+    
+    <% block('script').append('<script src="/js/formation.js"></script>') %>

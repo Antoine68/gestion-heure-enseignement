@@ -1,0 +1,88 @@
+<% layout("template.ejs") %>
+    <div id="delete-modal" class="modal">
+        <div class="modal-background" onclick="closeModals()"></div>
+        <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Suppression</p>
+            <button class="delete" aria-label="close" onclick="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="content">
+                <h6>Voulez-vous vraiment supprimer ce statut ?</h6>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <form class="form-delete" method="post">
+                <input type="submit" class="button is-primary" value="Supprimer">
+            </form>
+            <button class="button" onclick="closeModals()">Annuler</button>
+        </footer>
+        </div>
+    </div>
+    <div class="text-content">
+        <h2 class="title has-text-centered">Liste des statuts</h2>
+        <div class="btn-center">
+            <a class="button is-primary" href="/statuts/ajouter">Ajouter un statut</a>
+            <a class="button" href="/enseignants" style="margin-left: 5px;">Gérer les enseignants</a>
+        </div>
+        <div class="tab-search">
+            <div class="field has-addons" style="justify-content: center;">
+                <p class="control">
+                  <span class="select">
+                    <select id="select-search" onchange="searchTable()">
+                        <option value="name">Nom</option>
+                        <option value="nickname">Surnom</option>
+                        <option value="mandatory_hour">H obligatoires</option>
+                        <option value="addional_hour">H supplémentaires</option>
+                    </select>
+                  </span>
+                </p>
+                <p class="control has-icons-left has-icons-right">
+                    <input class="input" id="input-search" type="text" placeholder="Recherche..." onkeyup="searchTable()">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </p>
+            </div>            
+        </div>
+        <div class="table-container">
+            <table class="table is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Surnom</th>
+                        <th>H obligatoires</th>
+                        <th>H supplémentaires</th>
+                        <th>Nb d'enseignants</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i=0; i < status.length; i++) { %>	
+                        <tr>
+                            <td data-search="name"><%= status[i].name%></td>
+                            <td data-search="nickname"><%= status[i].nickname%></td>
+                            <td data-search="mandatory_hour">
+                                Minimum: <%= status[i].min_mandatory_hour%><br>
+                                Maximum: <%= status[i].max_mandatory_hour%>
+                            </td>
+                            <td data-search="additional_hour">
+                                Minimum: <%= status[i].min_additional_hour%><br>
+                                Maximum: <%= status[i].max_additional_hour%>                        
+                            </td>
+                            <td><%= status[i].num_teachers%></td>
+                            <td>
+                                <a href="/statuts/modifier/<%= status[i]._id _%>" title="Modifier"><i class="fas fa-edit"></i></a>
+                                <form style="display: inline-block;" action="/statuts/duplicate/<%= status[i]._id _%>" method="post">
+                                    <button class="button-link" title="Dupliquer"><i class="fas fa-copy"></i></button>
+                                </form>
+                                <% if(status[i].num_teachers === 0){ %> 
+                                    <button class="button-link" onclick="openDeleteModal('/statuts/delete/<%= status[i]._id _%>')" title="Supprimer"><i class="fas fa-trash-alt"></i></a>
+                                <% } %> 
+                            </td>
+                        </tr>
+                    <%}%>
+                </tbody>
+            </table>
+        </div>
+    </div>

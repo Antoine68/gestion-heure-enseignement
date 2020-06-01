@@ -1,0 +1,97 @@
+<% layout("template.ejs") %>
+<div id="list-modal" class="modal">
+    <div class="modal-background" onclick="closeModals()"></div>
+    <div class="modal-card" style="width: max-content; max-width: 100%;">
+    <header class="modal-card-head">
+        <p class="modal-card-title">Liste des intervenants du projet</p>
+        <button class="delete" aria-label="close" onclick="closeModals()"></button>
+    </header>
+    <section class="modal-card-body">
+        <div class="content">
+            <div class="tab-search">
+                <div class="field has-addons" style="justify-content: center;">
+                    <p class="control">
+                      <span class="select">
+                        <select id="select-search" onchange="searchTable()">
+                            <option value="last_name">Nom</option>
+                            <option value="first_name">Prénom</option>
+                            <option value="nickname">Surnom</option>
+                            <option value="status">Statut</option>
+                        </select>
+                      </span>
+                    </p>
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" id="input-search" type="text" placeholder="Recherche..." onkeyup="searchTable()">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </p>
+                </div>            
+            </div>
+            
+                <table class="table is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Surnom</th>
+                            <th>H obligatoires</th>
+                            <th>H supplémentaires</th>
+                            <th>Statut</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-unused">
+                    </tbody>
+                </table>
+    </section>
+    <footer class="modal-card-foot">
+        <button class="button" onclick="closeModals()">Fermer</button>
+    </footer>
+    </div>
+</div>
+    <div class="text-content">
+        <div class="btn-center">
+            <a class="button" href="/projets/<%= formation.project _%>/formation/render/<%= formation._id _%>">Retour à la formation</a>
+        </div>
+        <input type="hidden" id="formation" value="<%= formation._id _%>">
+        <input type="hidden" id="element" value="<%= element._id _%>">
+        <h2 class="title">Volumes horaires par groupe</h2>
+        <div class="table-container">
+            <table class="table is-bordered" id="table-group-schedule" style="width: 100%;"></table>
+        </div>
+        <div class="btn-center">
+            <button class="button is-primary" id="button-group-schedule">Valider les modifications</button>
+        </div>
+        <h2 class="title">Interventions (nombre de groupes par intervenant)</h2>
+        <div class="btn-center">
+            <button id="button-add-speaker" class="button is-primary">Ajouter des intervenants</button>
+        </div>
+        <div class="tab-search">
+            <div class="field has-addons" style="justify-content: center;">
+                <p class="control">
+                  <span class="select">
+                    <select id="select-search-1" onchange="searchTable('select-search-1','input-search-1')">
+                        <option value="full_name1">Prénom Nom</option>
+                    </select>
+                  </span>
+                </p>
+                <p class="control has-icons-left has-icons-right">
+                    <input class="input" id="input-search-1" type="text" placeholder="Recherche..." onkeyup="searchTable('select-search-1','input-search-1')">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </p>
+            </div>            
+        </div>
+        <div class="table-container tables-content">
+            <table id="table-intervention" class="table is-bordered" style="width: 100%;">
+                <thead id="thead-intervention">
+                </thead>
+                <tbody id="tbody-intervention">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <% block('script').append('<script src="/js/weekly_input.js"></script>') %>

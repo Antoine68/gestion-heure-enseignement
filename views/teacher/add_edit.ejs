@@ -1,0 +1,80 @@
+<% layout("template.ejs") %>
+    <div class="text-content">
+        <% if (typeof errors !== "undefined") { %>
+            <article class="message is-danger">
+              <div class="message-header">
+                <p>Erreurs dans le formulaire</p>
+              </div>
+              <div class="message-body message-errors">
+                Veuillez verifier les champs suivants:
+                <ul>
+                  <% for (let i=0; i < errors.length; i++) { %>	
+                    <li><%= errors[i].msg%></li>
+                  <%}%>
+                  </ul>                
+              </div>
+            </article>
+        <%}%>
+        <form action="<%= action _%>?_method=PUT" method="POST">
+            <div class="field">
+                <label class="label" for="last_name">Nom</label>
+                <p class="control has-icons-left has-icons-right">
+                <input onkeyup="generateTeacherNickname()" class="input" id="last_name" name="last_name" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.last_name _%><% }else if(typeof teacher !== "undefined"){ %><%= teacher.last_name _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+              <div class="field">
+                <label class="label" for="first_name">Prénom</label>
+                <p class="control has-icons-left has-icons-right">
+                <input onkeyup="generateTeacherNickname()" class="input" id="first_name" name="first_name" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.first_name _%><% }else if(typeof teacher !== "undefined"){ %><%= teacher.first_name _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+              <div class="field">
+                <label class="label" for="nickname">Surnom</label>
+                <p class="control has-icons-left">
+                  <input class="input" id="nickname" name="nickname" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.nickname _%><% } else if(typeof teacher !== "undefined"){ %><%= teacher.nickname _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+                <p class="help">Maximum 4 caractères</p>
+              </div>
+              <div class="field">
+                <label class="label" for="email">Email</label>
+                <p class="control has-icons-left has-icons-right">
+                <input class="input" id="email" name="email" type="email" value='<% if(typeof old !== "undefined"){ %><%= old.email _%><% }else if(typeof teacher !== "undefined"){ %><%= teacher.email _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-envelope"></i>
+                  </span>
+                </p>
+              </div>
+              <div class="field">
+                <label for="status">Statut</label>
+                <div class="control has-icons-left">
+                    <div class="select">
+                      <select id="status" name="status">
+                        <% for (let i=0; i < status.length; i++) { %>	
+                            <option value="<%= status[i]._id %>" <% if(typeof old !== "undefined" && old.status === status[i]._id.toString() ){ %> <%= "selected" _%> <% }else if(typeof teacher !== "undefined" && teacher.status._id.toString() === status[i]._id.toString()){ %> <%= "selected" _%> <% } %>><%= status[i].name %></option>
+                        <%}%>
+                      </select>
+                    </div>
+                    <span class="icon is-left">
+                      <i class="fas fa-list"></i>
+                    </span>
+                  </div>
+              </div>
+              <div class="field is-grouped is-grouped-centered">
+                <p class="control">
+                    <a href="/enseignants" class="button is-light">Annuler</a>
+                </p>
+                <p class="control">
+                    <input type="submit" class="button is-primary" value="Valider">
+                </p>
+              </div>
+        </form>
+    </div>

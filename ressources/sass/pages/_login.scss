@@ -1,0 +1,21 @@
+#section-login{
+    background: $background-gradient;
+    color: white;
+    h1{
+        text-align: center;
+    }
+    #hero-body-form{
+        flex-direction: column;
+        justify-content: center;
+    }
+    .control{
+        text-align: center;
+    }
+}
+
+.message-errors{
+    text-align: center;
+    ul{
+        list-style: disc;
+    }
+}

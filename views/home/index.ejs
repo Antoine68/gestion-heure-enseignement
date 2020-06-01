@@ -1,0 +1,46 @@
+<% layout("template.ejs") %>
+    <div class="text-content">
+        <h2 class="title has-text-centered">Introduction</h2>
+        <p class="has-text-centered has-text-justified">
+            L’application permet de saisir les heures annuelles faîtes par un enseignant et d’en faire un bilan global. 
+            Pour cela l'application permet de représenter la hierarchie organisationnelle du département, 
+            c'est à dire qu'il est possible de découper chaque projet (representant une année) en plusieurs périodes
+            regroupants des semaines. Ces périodes peuvent ensuite être décomposées en sous-parties et ainsi de suite...
+        </p>
+    </div>
+    <div class="text-content">
+        <h2 class="title has-text-centered">Tableau de bord</h2>
+        <div class="columns">
+            <div class="column">
+                <div class="column-content">
+                    <h3 class="title"><i class="fas fa-graduation-cap"></i>Projets</h3>
+                    <ul>
+                        <li>Gestion des formations</li>
+                        <li>Saisie des heures</li>
+                        <li>Bilans des heures</li>
+                    </ul>
+                    <a class="button" href="/projets">Afficher</a>
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-content">
+                    <h3 class="title"><i class="fas fa-project-diagram"></i>Décompositions</h3>
+                    <ul>
+                        <li>Gestion de la structure des formations</li>
+                    </ul>
+                    <a class="button" href="/decompositions">Afficher</a>
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-content">
+                    <h3 class="title"><i class="fas fa-user"></i>Enseignants</h3>
+                    <ul>
+                        <li>Gestion des status d'enseignant</li>
+                        <li>Gestion des enseignants</li>
+                    </ul>
+                    <a class="button" href="/enseignants">Afficher</a>
+                </div>
+            </div>
+          </div>
+    </div>
+    

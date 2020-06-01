@@ -1,0 +1,86 @@
+<% layout("template.ejs") %>
+    <div id="delete-modal" class="modal">
+        <div class="modal-background" onclick="closeModals()"></div>
+        <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Suppression</p>
+            <button class="delete" aria-label="close" onclick="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="content">
+                <h6>Voulez-vous vraiment supprimer cette formation ?</h6>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <form class="form-delete" method="post">
+                <input type="submit" class="button is-primary" value="Supprimer">
+            </form>
+            <button class="button" onclick="closeModals()">Annuler</button>
+        </footer>
+        </div>
+    </div>
+    <div id="archivate-modal" class="modal">
+        <div class="modal-background" onclick="closeModals()"></div>
+        <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Archivage</p>
+            <button class="delete" aria-label="close" onclick="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="content">
+                <h6>Voulez-vous vraiment archiver ce projet ?</h6>
+                <p>Vous pourrez le retrouver dans l'onglet projets archivés</p>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <form style="margin-right: 5px;" class="form-archivate" method="post">
+                <input type="submit" class="button is-primary" value="Archiver">
+            </form>
+            <button class="button" onclick="closeModals()">Annuler</button>
+        </footer>
+        </div>
+    </div>
+    <div class="text-content">
+        <h2 class="title has-text-centered">Liste des projets</h2>
+        <div class="btn-center">
+            <a class="button is-primary" href="/projets/ajouter">Ajouter un projet</a>
+            <a class="button" href="/projets/archives" style="margin-left: 5px;">Projets archivés</a>
+        </div>
+        <ul>
+            <% for (let i=0; i < projects.length; i++) { %>
+                <li class="folder-container" data-id="<%=projects[i]._id%>">
+                    <div class="folder">
+                        <div class="is-pulled-left">
+                            <i class="btn-folder fas fa-folder-open" onclick="hideShowSubFolder('<%=projects[i]._id%>')" style="cursor: pointer;"></i>Titre: <%= projects[i].title %> <i class="fas fa-arrow-right"></i> Année: <%= projects[i].start_year %> - <%= projects[i].end_year %>
+                        </div>
+                        <div class="is-pulled-right">
+                            <a href="/projets/modifier/<%= projects[i]._id _%>" title="Modifier"><i class="fas fa-edit"></i></a>
+                            <a href="#" title="Bilan"><i class="fas fa-calculator"></i></a>
+                            <a href="/projets/intervenants/<%= projects[i]._id _%>" title="Intervenants"><i class="fas fa-users"></i></a>
+                            <button class="button-link" onclick="openArchivateModal('/projets/archivate/<%= projects[i]._id _%>')" title="Archiver"><i class="fas fa-archive"></i></button>
+                        </div>
+                    </div>
+                    <div class="sub-folder">
+                        <ul>
+                            <% for (let j=0; j < projects[i].formations.length; j++) { %>
+                                <li>
+                                    <div class="is-pulled-left">
+                                        <i class="fas fa-angle-right"></i>Formation : nom: <%= projects[i].formations[j].name  %> - surnom: <%= projects[i].formations[j].nickname  %>
+                                    </div>
+                                    <div class="is-pulled-right">
+                                        <a href="/projets/<%= projects[i]._id _%>/formation/modifier/<%= projects[i].formations[j]._id _%>" title="Modifier"><i class="fas fa-edit"></i></a>
+                                        <a href="/projets/<%= projects[i]._id _%>/formation/render/<%= projects[i].formations[j]._id _%>" title="Gérer la formation"><i class="fas fa-table"></i></a>
+                                        <button class="button-link" onclick="openDeleteModal('/formation/delete/<%= projects[i].formations[j]._id _%>')" title="Supprimer"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </li>
+                            <%}%>
+                        </ul>
+                        <div class="btn-center">
+                            <a class="button" href="/projets/<%= projects[i]._id _%>/formation/ajouter">Ajouter une formation</a>
+                        </div>
+                    </div>
+                </li>
+            <%}%>
+        </ul>
+    </div>

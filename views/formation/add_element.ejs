@@ -1,0 +1,261 @@
+<% layout("template.ejs") %>
+    <div class="text-content">
+        <% if (typeof errors !== "undefined") { %>
+            <article class="message is-danger">
+              <div class="message-header">
+                <p>Erreurs dans le formulaire</p>
+              </div>
+              <div class="message-body message-errors">
+                Veuillez verifier les champs suivants:
+                <ul>
+                  <% for (let i=0; i < errors.length; i++) { %>	
+                    <li><%= errors[i].msg%></li>
+                  <%}%>
+                  </ul>                
+              </div>
+            </article>
+        <%}%>
+        <form action="<%= action _%>?_method=PUT" method="POST">
+            <div class="field">
+                <label class="label" for="title">Titre</label>
+                <p class="control has-icons-left has-icons-right">
+                <input class="input" id="title" name="title" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.title _%><% }else if(typeof element !== "undefined"){ %><%= element.title _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+              <div class="field">
+                <label class="label" for="nickname">Surnom</label>
+                <p class="control has-icons-left">
+                  <input class="input" id="nickname" name="nickname" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.nickname _%><% } else if(typeof element !== "undefined"){ %><%= element.nickname _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+              <%if(type === "period") {%>
+                <div class="field">
+                  <label class="label" for="week">Nombre de semaines</label>
+                  <p class="control has-icons-left">
+                    <input class="input" id="week" name="week" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.week _%><% } else if(typeof element !== "undefined"){ %><%= element.week _%><% } %>'>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-sort-numeric-up"></i>
+                    </span>
+                  </p>
+                </div>
+              <%}%>
+              <div class="field">
+                <label class="label" for="reference">Référence</label>
+                <p class="control has-icons-left">
+                  <input class="input" id="reference" name="reference" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.reference _%><% } else if(typeof element !== "undefined"){ %><%= element.reference _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+              </div>
+              <div class="field">
+                <label class="label" for="order">Ordre dans la hiérarchie</label>
+                <p class="control has-icons-left">
+                  <input class="input" id="order" name="order" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.order _%><% } else if(typeof element !== "undefined"){ %><%= element.order _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-sort-numeric-up"></i>
+                  </span>
+                </p>
+              </div>
+            <div class="field">
+                <label class="label">Volume d'heures prévu</label>
+                <div class="separator">
+                    <div>
+                        <label for="tp_hour">TP:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="tp_hour" name="tp_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.tp_hour _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.TP _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div>
+                        <label for="td_hour">TD:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="td_hour" name="td_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.td_hour _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.TD _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div>
+                        <label for="cm_hour">CM:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="cm_hour" name="cm_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.cm_hour _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.CM _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+            <label class="label">Nombre de groupes <%if(type === "period"){%> par défaut dans la période <%}else{%> effectif <%}%></label>
+              <div class="separator">
+                  <div>
+                      <label for="tp_groups">TP:</label>
+                      <p class="control has-icons-left has-icons-right">
+                          <input class="input" id="tp_groups" name="tp_groups" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.tp_groups _%><% }else if(typeof element !== "undefined"){ %><%= element.number_groups.TP _%><% } %>'>
+                          <span class="icon is-small is-left">
+                              <i class="fas fa-sort-numeric-up"></i>
+                          </span>
+                      </p>
+                  </div>
+                  <div>
+                      <label for="td_groups">TD:</label>
+                      <p class="control has-icons-left has-icons-right">
+                          <input class="input" id="td_groups" name="td_groups" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.td_groups _%><% }else if(typeof element !== "undefined"){ %><%= element.number_groups.TD _%><% } %>'>
+                          <span class="icon is-small is-left">
+                              <i class="fas fa-sort-numeric-up"></i>
+                          </span>
+                      </p>
+                  </div>
+                  <div>
+                      <label for="cm_groups">CM:</label>
+                      <p class="control has-icons-left has-icons-right">
+                          <input class="input" id="cm_groups" name="cm_groups" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.cm_groups _%><% }else if(typeof element !== "undefined"){ %><%= element.number_groups.CM _%><% } %>'>
+                          <span class="icon is-small is-left">
+                              <i class="fas fa-sort-numeric-up"></i>
+                          </span>
+                      </p>
+                  </div>
+                  <div>
+                    <label for="partiel_groups">PARTIEL:</label>
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" id="partiel_groups" name="partiel_groups" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.partiel_groups _%><% }else if(typeof element !== "undefined"){ %><%= element.number_groups.PARTIEL _%><% } %>'>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-sort-numeric-up"></i>
+                        </span>
+                    </p>
+                </div>
+              </div>
+          </div>
+            <%if(type === "element"){%>
+                <div class="field">
+                    <label class="label" for="input_type">Type de saisie</label>
+                    <div class="control has-icons-left">
+                        <div class="select">
+                        <select id="input_type" name="input_type" onchange="manageInputType()">
+                            <option value="aucun">Aucun</option>
+                            <option value="hebdomadaire">Hebdomadaire</option>
+                            <option value="global">Global</option>
+                        </select>
+                        </div>
+                        <span class="icon is-left">
+                        <i class="fas fa-list"></i>
+                        </span>
+                    </div>
+                </div>
+                <div id="courses-types-container" class="field">
+                  <label class="label">Types de cours</label>
+                    <div class="separator">
+                        <div>
+                          <label class="checkbox">
+                            <input type="checkbox" name="courses_types" value="TP">
+                            TP
+                          </label>
+                        </div>
+                        <div>
+                          <label class="checkbox">
+                            <input type="checkbox" name="courses_types" value="TD">
+                            TD
+                          </label>
+                        </div>
+                        <div>
+                          <label class="checkbox">
+                            <input type="checkbox" name="courses_types" value="CM">
+                            CM
+                          </label>
+                        </div>
+                        <div>
+                          <label class="checkbox">
+                            <input type="checkbox" name="courses_types" value="PARTIEL">
+                            PARTIEL
+                          </label>
+                      </div>
+                    </div>
+                </div>
+                <div id="forfait-container" class="field">
+                  <label class="label">Forfaits</label>
+                    <div class="separator">
+                        <div>
+                            <label for="tp_forfait">TP:</label>
+                            <p class="control has-icons-left has-icons-right">
+                                <input class="input" id="tp_forfait" name="tp_forfait" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.tp_forfait _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.TP _%><% } %>'>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-sort-numeric-up"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div>
+                            <label for="td_forfait">TD:</label>
+                            <p class="control has-icons-left has-icons-right">
+                                <input class="input" id="td_forfait" name="td_forfait" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.td_forfait _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.TD _%><% } %>'>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-sort-numeric-up"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div>
+                            <label for="cm_forfait">CM:</label>
+                            <p class="control has-icons-left has-icons-right">
+                                <input class="input" id="cm_forfait" name="cm_forfait" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.cm_forfait _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.CM _%><% } %>'>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-sort-numeric-up"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div>
+                          <label for="partiel_forfait">PARTIEL:</label>
+                          <p class="control has-icons-left has-icons-right">
+                              <input class="input" id="partiel_forfait" name="partiel_forfait" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.partiel_forfait _%><% }else if(typeof element !== "undefined"){ %><%= element.hour_volume.TP _%><% } %>'>
+                              <span class="icon is-small is-left">
+                                  <i class="fas fa-sort-numeric-up"></i>
+                              </span>
+                          </p>
+                      </div>
+                    </div>
+                </div>
+                <script>
+                  document.addEventListener("DOMContentLoaded", function() {
+                    manageInputType();
+                  });
+                </script>
+            <%}%>
+              <% if(typeof elements !== "undefined"){ %> 
+                <div class="field">
+                        <label class="label" for="parent">Parent</label>
+                        <div class="control has-icons-left">
+                            <div class="select">
+                            <select id="parent" name="parent">
+                                <% for (let i=0; i < elements.length; i++) { %>	
+                                    <% if(! (typeof element !== "undefined" && element._id.toString() === elements[i]._id.toString())){ %>
+                                        <option value="<%= elements[i]._id %>" <% if(typeof old !== "undefined" && old.parent === elements[i]._id.toString() ){ %> <%= "selected" _%> <% }else if(typeof element !== "undefined" && element.parent._id.toString() === elements[i]._id.toString()){ %> <%= "selected" _%><% }else if(typeof parent !== "undefined" && parent._id.toString() === elements[i]._id.toString()){ %> <%= "selected" _%> <% } %>><%= elements[i].title || elements[i].buildingElement.title %></option>
+                                    <%}%>
+                                <% } %> 
+                            </select>
+                            </div>
+                            <span class="icon is-left">
+                            <i class="fas fa-list"></i>
+                            </span>
+                        </div>
+                </div>
+            <% } %> 
+              <div class="field is-grouped is-grouped-centered" style="margin-top: 30px;">
+                <p class="control">
+                    <a href="/projets/<%= formation.project _%>/formation/render/<%= formation._id _%>" class="button is-light">Annuler</a>
+                </p>
+                <p class="control">
+                    <input type="submit" class="button is-primary" value="Valider">
+                </p>
+              </div>
+        </form>
+    </div>
+    
+

@@ -1,0 +1,91 @@
+<% layout("template.ejs") %>
+    <div id="delete-modal" class="modal">
+        <div class="modal-background" onclick="closeModals()"></div>
+        <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Suppression</p>
+            <button class="delete" aria-label="close" onclick="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="content">
+                <h6>Voulez-vous vraiment supprimer cet enseignant ?</h6>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <form class="form-delete" method="post">
+                <input type="submit" class="button is-primary" value="Supprimer">
+            </form>
+            <button class="button" onclick="closeModals()">Annuler</button>
+        </footer>
+        </div>
+    </div>
+
+    <div class="text-content">
+        <h2 class="title has-text-centered">Liste des enseignants</h2>
+        <div class="btn-center">
+            <a class="button is-primary" href="/enseignants/ajouter">Ajouter un enseignant</a>
+            <a class="button" href="/statuts" style="margin-left: 5px;">Gérer les statuts</a>
+        </div>
+        <div class="tab-search">
+            <div class="field has-addons" style="justify-content: center;">
+                <p class="control">
+                  <span class="select">
+                    <select id="select-search" onchange="searchTable()">
+                        <option value="last_name">Nom</option>
+                        <option value="first_name">Prénom</option>
+                        <option value="nickname">Surnom</option>
+                        <option value="email">Email</option>
+                        <option value="status">Statut</option>
+                    </select>
+                  </span>
+                </p>
+                <p class="control has-icons-left has-icons-right">
+                    <input class="input" id="input-search" type="text" placeholder="Recherche..." onkeyup="searchTable()">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </p>
+            </div>            
+        </div>
+        <div class="table-container">
+            <table class="table is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Surnom</th>
+                        <th>Email</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i=0; i < teachers.length; i++) { %>	
+                        <tr>
+                            <td data-search="last_name"><%= teachers[i].last_name%></td>
+                            <td data-search="first_name"><%= teachers[i].first_name%></td>
+                            <td data-search="nickname"><%= teachers[i].nickname%></td>
+                            <td data-search="email"><%= teachers[i].email%></td>
+                            <td data-search="status">
+                                <div class="tooltip">
+                                    <%= teachers[i].status.name%>
+                                    <span class="tooltiptext">
+                                        Heures obligatoires: <%= teachers[i].status.min_mandatory_hour%> - <%= teachers[i].status.max_mandatory_hour%>
+                                        <br>
+                                        Heures supplémentaires: <%= teachers[i].status.min_additional_hour%> - <%= teachers[i].status.max_additional_hour%>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="/enseignants/modifier/<%= teachers[i]._id _%>" title="Modifier"><i class="fas fa-edit"></i></a>
+                                <form style="display: inline-block;" action="/enseignants/duplicate/<%= teachers[i]._id _%>" method="post">
+                                    <button class="button-link" title="Dupliquer"><i class="fas fa-copy"></i></button>
+                                </form>
+                                <button class="button-link" onclick="openDeleteModal('/enseignants/delete/<%= teachers[i]._id _%>')" title="Supprimer"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                    <%}%>
+                </tbody>
+            </table>
+        </div>
+    </div>

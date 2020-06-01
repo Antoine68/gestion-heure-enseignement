@@ -1,0 +1,60 @@
+<% layout("template.ejs") %>
+    <div class="text-content">
+        <% if (typeof errors !== "undefined") { %>
+            <article class="message is-danger">
+              <div class="message-header">
+                <p>Erreurs dans le formulaire</p>
+              </div>
+              <div class="message-body message-errors">
+                Veuillez verifier les champs suivants:
+                <ul>
+                  <% for (let i=0; i < errors.length; i++) { %>	
+                    <li><%= errors[i].msg%></li>
+                  <%}%>
+                  </ul>                
+              </div>
+            </article>
+        <%}%>
+        <form action="<%= action _%>?_method=PUT" method="POST">
+            <div class="field">
+                <label class="label" for="title">Titre</label>
+                <p class="control has-icons-left has-icons-right">
+                <input class="input" id="title" name="title" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.title _%><% }else if(typeof project !== "undefined"){ %><%= project.title _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+            </div>
+            <div class="field">
+                <label class="label">Date</label>
+                <div class="separator">
+                    <div class="part">
+                        <label for="start_year">Année début:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="start_year" name="start_year" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.start_year _%><% }else if(typeof project !== "undefined"){ %><%= project.start_year _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="part">
+                        <label for="end_year">Année fin:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="end_year" name="end_year" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.end_year_%><% }else if(typeof project !== "undefined"){ %><%= project.end_year _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-grouped is-grouped-centered" style="margin-top: 30px;">
+                <p class="control">
+                    <a href="/projets" class="button is-light">Annuler</a>
+                </p>
+                <p class="control">
+                    <input type="submit" class="button is-primary" value="Valider">
+                </p>
+            </div>
+        </form>
+    </div>

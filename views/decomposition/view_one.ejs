@@ -1,0 +1,29 @@
+<% layout("template.ejs") %>
+<div id="element-modal" class="modal">
+  <div class="modal-background" onclick="closeModals()"></div>
+  <div class="modal-card">
+  <header class="modal-card-head">
+      <p class="modal-card-title">Information</p>
+      <button class="delete" aria-label="close" onclick="closeModals()"></button>
+  </header>
+  <section class="modal-card-body">
+    <div class="content">
+
+    </div>         
+  </section>
+  <footer class="modal-card-foot">
+      <button class="button" onclick="closeModals()">Fermer</button>
+      <a class="button is-primary button-edit" href="#">Modifier</a>
+      <a class="button is-primary button-add-child" href="#">Ajouter un enfant</a>
+  </footer>
+  </div>
+</div>
+<h2 class="has-text-centered">Diagramme systématique de la décomposition</h2>
+<input type="hidden" id="decomposition-id" value="<%= decomposition._id %>">
+<div class="tree-container">
+    <figure>
+        <ul class="tree">
+        </ul>
+    </figure>
+</div>
+<% block('script').append('<script src="/js/decomposition.js"></script>') %>

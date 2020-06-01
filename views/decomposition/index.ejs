@@ -1,0 +1,52 @@
+<% layout("template.ejs") %>
+<div class="text-content">
+    <h2 class="title has-text-centered">Liste des décompositions</h2>
+    <div class="btn-center">
+        <a class="button is-primary" href="/decompositions/ajouter">Créer une décomposition</a>
+    </div>
+    <div class="tab-search">
+        <div class="field has-addons" style="justify-content: center;">
+            <p class="control">
+              <span class="select">
+                <select id="select-search" onchange="searchTable()">
+                    <option value="name">Nom</option>
+                    <option value="nickname">Surnom</option>
+                </select>
+              </span>
+            </p>
+            <p class="control has-icons-left has-icons-right">
+                <input class="input" id="input-search" type="text" placeholder="Recherche..." onkeyup="searchTable()">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-search"></i>
+                </span>
+            </p>
+        </div>            
+    </div>
+    <div class="table-container">
+        <table class="table is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Surnom</th>
+                    <th>Création</th>
+                    <th>Modification</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let i=0; i < decompositions.length; i++) { %>	
+                    <tr>
+                        <td data-search="name"><%= decompositions[i].name%></td>
+                        <td data-search="nickname"><%= decompositions[i].nickname%></td>
+                        <td>le <%= moment(decompositions[i].created_at).format('DD-MM-YYYY à HH:mm')%></td>
+                        <td>le <%= moment(decompositions[i].updated_at).format('DD-MM-YYYY à HH:mm')%></td>
+                        <td>
+                            <a href="/decompositions/afficher/<%= decompositions[i]._id _%>" title="Afficher"><i class="fas fa-eye"></i></a>
+                            <a href="/decompositions/modifier/<%= decompositions[i]._id _%>" title="Modifier"><i class="fas fa-edit"></i></a>
+                        </td>
+                    </tr>
+                <%}%>
+            </tbody>
+        </table>
+    </div>
+</div>

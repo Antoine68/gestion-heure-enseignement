@@ -1,0 +1,93 @@
+<% layout("template.ejs") %>
+    <div class="text-content">
+        <% if (typeof errors !== "undefined") { %>
+            <article class="message is-danger">
+              <div class="message-header">
+                <p>Erreurs dans le formulaire</p>
+              </div>
+              <div class="message-body message-errors">
+                Veuillez verifier les champs suivants:
+                <ul>
+                  <% for (let i=0; i < errors.length; i++) { %>	
+                    <li><%= errors[i].msg%></li>
+                  <%}%>
+                  </ul>                
+              </div>
+            </article>
+        <%}%>
+        <form action="<%= action _%>?_method=PUT" method="POST">
+            <div class="field">
+                <label class="label" for="last_name">Nom</label>
+                <p class="control has-icons-left has-icons-right">
+                <input class="input" id="name" name="name" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.name _%><% }else if(typeof status !== "undefined"){ %><%= status.name _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+            </div>
+            <div class="field">
+                <label class="label" for="nickname">Surnom</label>
+                <p class="control has-icons-left">
+                  <input class="input" id="nickname" name="nickname" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.nickname _%><% } else if(typeof status !== "undefined"){ %><%= status.nickname _%><% } %>'>
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-signature"></i>
+                  </span>
+                </p>
+                <p class="help">Maximum 4 caractères</p>
+            </div>
+            <div class="field">
+                <label class="label">Heures obligatoires</label>
+                <div class="separator">
+                    <div class="part">
+                        <label for="min_mandatory_hour">Minimum:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="min_mandatory_hour" name="min_mandatory_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.min_mandatory_hour _%><% }else if(typeof status !== "undefined"){ %><%= status.min_mandatory_hour _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="part">
+                        <label for="max_mandatory_hour">Maximum:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="max_mandatory_hour" name="max_mandatory_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.max_mandatory_hour _%><% }else if(typeof status !== "undefined"){ %><%= status.max_mandatory_hour _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Heures supplémentaires</label>
+                <div class="separator">
+                    <div class="part">
+                        <label for="min_additional_hour">Minimum:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="min_additional_hour" name="min_additional_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.min_additional_hour _%><% }else if(typeof status !== "undefined"){ %><%= status.min_additional_hour _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="part">
+                        <label for="max_additional_hour">Maximum:</label>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="max_additional_hour" name="max_additional_hour" type="text" value='<% if(typeof old !== "undefined"){ %><%= old.max_additional_hour _%><% }else if(typeof status !== "undefined"){ %><%= status.max_additional_hour _%><% } %>'>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-sort-numeric-up"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-grouped is-grouped-centered" style="margin-top: 30px;">
+                <p class="control">
+                    <a href="/statuts" class="button is-light">Annuler</a>
+                </p>
+                <p class="control">
+                    <input type="submit" class="button is-primary" value="Valider">
+                </p>
+            </div>
+        </form>
+    </div>
