@@ -55,7 +55,7 @@
                         </div>
                         <div class="is-pulled-right">
                             <a href="/projets/modifier/<%= projects[i]._id _%>" title="Modifier"><i class="fas fa-edit"></i></a>
-                            <a href="#" title="Bilan"><i class="fas fa-calculator"></i></a>
+                            <a href="/projets/<%= projects[i]._id _%>/bilan" title="Bilan"><i class="fas fa-calculator"></i></a>
                             <a href="/projets/intervenants/<%= projects[i]._id _%>" title="Intervenants"><i class="fas fa-users"></i></a>
                             <button class="button-link" onclick="openArchivateModal('/projets/archivate/<%= projects[i]._id _%>')" title="Archiver"><i class="fas fa-archive"></i></button>
                         </div>

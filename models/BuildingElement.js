@@ -21,16 +21,4 @@ let buildingElementSchema = new Schema({
 buildingElementSchema.plugin(tree);
 let BuildingElement = mongoose.model('BuildingElement', buildingElementSchema);
 
-/*let buildingPeriodSchema = new Schema({
-    week: Number,
-    default_number_group: {
-        CM : Number,
-        TP: Number,
-        TD: Number,
-        PARTIEL: Number
-    }
-});
-buildingPeriodSchema.plugin(tree);
-let BuildingPeriod = BuildingElement.discriminator('BuildingPeriod', buildingPeriodSchema); */
-
 module.exports = BuildingElement;

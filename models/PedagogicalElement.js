@@ -37,6 +37,8 @@ let pedagogicalElementSchema = new Schema({
         TP: Number,
         TD: Number,
     },
+    __t: String,
+    week: Number,
     interventions : [
         {type: Schema.Types.ObjectId, ref: 'Speaker'}
     ]
@@ -58,10 +60,9 @@ pedagogicalElementSchema.virtual('groups_teachers', {
 })
 let PedagogicalElement = mongoose.model('PedagogicalElement', pedagogicalElementSchema);
 
-let pedagogicalPeriodSchema = new Schema({
+/*let pedagogicalPeriodSchema = new Schema({
     week: Number
 });
-pedagogicalPeriodSchema.plugin(tree);
-let PedagogicalPeriod = PedagogicalElement.discriminator('PedagogicalPeriod', pedagogicalPeriodSchema);
+let PedagogicalPeriod = PedagogicalElement.discriminator('PedagogicalPeriod', pedagogicalPeriodSchema);*/
 
-module.exports = {PedagogicalElement, PedagogicalPeriod};
+module.exports = PedagogicalElement;

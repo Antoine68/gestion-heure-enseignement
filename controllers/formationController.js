@@ -2,8 +2,10 @@ let Formation = require('../models/Formation');
 let Project = require('../models/Project');
 let Decomposition = require('../models/Decomposition');
 let BuildingElement = require('../models/BuildingElement');
-let {PedagogicalElement, PedagogicalPeriod} = require('../models/PedagogicalElement');
+let PedagogicalElement = require('../models/PedagogicalElement');
 let { validationResult } = require('express-validator');
+let {Volume, WeeklyVolume, GlobalVolume} = require('../models/Volume');
+let GroupTeacher = require('../models/GroupTeacher');
 
 
 
@@ -67,7 +69,8 @@ exports.store = (req, res) => {
                     root.getChildrenTree(function(err, tree){
                         for(let i=0; i<tree.length; i++){
                             let period = tree[i];
-                            pedagogicalPeriod = new PedagogicalPeriod({
+                            pedagogicalPeriod = new PedagogicalElement({
+                                __t: "PedagogicalPeriod",
                                 buildingElement: period._id,
                                 order: period.order,
                                 project: idProject,
@@ -217,6 +220,9 @@ exports.listElements = (req, res) => {
 
 function calculateWeeklyTotal(element, week){
     if(element.input_type === "hebdomadaire"){
+        if(typeof element.totalsBySpeaker === "undefined"){
+            element.totalsBySpeaker = [];
+        }
         let totals = {};
         for(key in element.courses_types) {
             totals[key] = 0;
@@ -247,8 +253,9 @@ function calculateWeeklyTotal(element, week){
                     }
                 }
             }
-            speakers[i].totals = totalsTeacher;
+            element.totalsBySpeaker.push({speaker: speakers[i], totals: totalsTeacher});
         }
+        
     }
     for(let i=0; i<element.children.length; i++){
         calculateWeeklyTotal(element.children[i], week);
@@ -352,7 +359,8 @@ exports.storeElement = (req, res) => {
 exports.storePeriod = (req, res) => {
     let id = req.params.id;
     Formation.findOne({_id: id}).populate("element").then(formation => {
-        let period = new PedagogicalPeriod({
+        let period = new PedagogicalElement({
+            __t: "PedagogicalPeriod",
             title: req.body.title,
             nickname: req.body.nickname,
             reference: req.body.reference,
@@ -417,31 +425,65 @@ exports.formEditElement = (req, res) => {
     })
 }
 
-exports.formEditElemet = (req, res) => {
+exports.editElement = (req, res) => {
     let id = req.params.id;
     let idElement = req.params.idElement;
     Formation.findOne({_id: id}).then(formation => {
         PedagogicalElement.findOne({_id: idElement}).populate("buildingElement").then(element => {
             let updateElement = {
-
+                title: req.body.title || undefined,
+                nickname: req.body.nickname || undefined,
+                reference: req.body.reference || undefined,
+                order: req.body.order,
+                input_type: req.body.input_type,
+                hour_volume: {
+                    TP: req.body.tp_hour,
+                    TD: req.body.td_hour,
+                    CM: req.body.cm_hour,
+                },
+                forfait : {
+                    TP: req.body.tp_forfait || 0,
+                    TD: req.body.td_forfait || 0,
+                    CM: req.body.cm_forfait || 0,
+                    PARTIEL: req.body.partiel_forfait || 0
+                },
+                number_groups : {
+                    TP: req.body.tp_groups,
+                    TD: req.body.td_groups,
+                    CM: req.body.cm_groups,
+                    PARTIEL: req.body.partiel_groups
+                },
+                courses_types: {
+                    TP: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("TP") ,
+                    TD: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("TD") ,
+                    CM: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("CM") ,
+                    PARTIEL: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("PARTIEL") 
+                }
             }
-
-
-
-
-            let title = "Formation "+ formation.name + " - Modifier un élément";
-            let type = "element";
+            if(element.input_type !== req.body.input_type){
+                Volume.deleteMany({pedagogical_element: element._id}, function (err, result) {
+                    GroupTeacher.deleteMany({pedagogical_element: element._id},function(err, result){})
+                })   
+            }
             if(element.__t === "PedagogicalPeriod"){
-                title = "Formation "+ formation.name + " - Modifier une période";
-                type = "period";
+                updateElement.week = req.body.week;
+                if(req.body.week < element.week){
+                    let diff = element.week - req.body.week;
+                    element.getChildren({input_type: "hebdomadaire"}, {}, {}, true, function(err, childrens){
+                        for(let i=0; i<childrens.length; i++){
+                            for(let j=element.week; j>element.week-diff; j--){
+                                WeeklyVolume.deleteMany({week: j, pedagogical_element: childrens[i]._id}, function (err, result) {
+                                    GroupTeacher.deleteMany({week: j, pedagogical_element: childrens[i]._id},function(err, result){})
+                                }) 
+                            }
+                        }
+                    });
+                }
             }
-            res.render("formation/edit_element",{
-                title: title,
-                type: type,
-                formation: formation,
-                action: "/formation/" + formation._id + "/element/"+ element._id + "/edit",
-                element: element
-            });
+            element.update(updateElement, function(error){
+                if (error) {res.status(404).json({error})}
+                res.redirect('/projets/'+ formation.project + '/formation/render/'+ formation._id);
+            })
         })
     })
 }

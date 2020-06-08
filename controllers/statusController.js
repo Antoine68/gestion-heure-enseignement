@@ -41,7 +41,8 @@ exports.store = (req, res, next) => {
         min_mandatory_hour: req.body.min_mandatory_hour,
         max_mandatory_hour : req.body.max_mandatory_hour,
         min_additional_hour: req.body.min_additional_hour,
-        max_additional_hour: req.body.max_additional_hour
+        max_additional_hour: req.body.max_additional_hour,
+        algorithm: req.body.algorithm,
     });
     status.save(function (error, fluffy) {
         if (error) {res.status(404).json({error})}
@@ -66,7 +67,8 @@ exports.edit = (req, res, next) => {
         min_mandatory_hour: req.body.min_mandatory_hour,
         max_mandatory_hour : req.body.max_mandatory_hour,
         min_additional_hour: req.body.min_additional_hour,
-        max_additional_hour: req.body.max_additional_hour
+        max_additional_hour: req.body.max_additional_hour,
+        algorithm: req.body.algorithm
     })
         .then(() => res.redirect('/statuts'))
         .catch(error => res.status(400).json({ error }));
@@ -81,7 +83,8 @@ exports.duplicate = (req, res, next) => {
             min_mandatory_hour: s.min_mandatory_hour,
             max_mandatory_hour : s.max_mandatory_hour,
             min_additional_hour: s.min_additional_hour,
-            max_additional_hour:s.max_additional_hour
+            max_additional_hour:s.max_additional_hour,
+            algorithm: s.algorithm,
         };
         res.render("status/add_edit", {
             title: "Ajouter un statut",

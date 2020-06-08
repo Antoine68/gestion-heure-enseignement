@@ -9506,7 +9506,7 @@ i {
   color: #ffd257;
 }
 
-.fa-project-diagram {
+.fa-network-wired {
   color: #f96854;
 }
 
@@ -9779,15 +9779,34 @@ input[type=number] {
   margin: 0 !important;
 }
 .tables-content table td {
+  background-clip: padding-box !important;
   text-align: center;
   vertical-align: middle;
   position: relative;
+}
+.tables-content table td button {
+  padding: 0 5px !important;
 }
 .tables-content table td .table-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   left: 0;
+}
+.tables-content table td .add-btn-bottom {
+  position: absolute;
+  bottom: 5px;
+  transform: translateX(-50%);
+  left: 50%;
+}
+.tables-content table td[contenteditable=true] {
+  background-color: #f6f6f6;
+}
+.tables-content table td[contenteditable=true]:focus {
+  border: 1.5px solid black !important;
+}
+.tables-content table td[class=modification][contenteditable=true] {
+  background-color: #b3ddff;
 }
 .tables-content table .td-period {
   font-weight: bold;
@@ -9802,12 +9821,23 @@ input[type=number] {
 .tables-content table .td-border-bottom {
   border-bottom: 2px solid black !important;
 }
+.tables-content table .td-unable {
+  cursor: not-allowed;
+  background-color: #b4b4b4;
+}
 
 .pointer {
   cursor: pointer;
 }
 .pointer:hover {
   background-color: #0aceaf7d !important;
+}
+
+#bilan-container table {
+  margin-top: 50px !important;
+}
+#bilan-container table td {
+  border-color: #dbdbdb !important;
 }
 
 #section-login {

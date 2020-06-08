@@ -18,6 +18,57 @@
         </footer>
         </div>
     </div>
+    <div id="list-modal" class="modal">
+        <div class="modal-background" onclick="closeModals()"></div>
+        <div class="modal-card" style="width: max-content; max-width: 100%;">
+        <header class="modal-card-head">
+            <p class="modal-card-title" id="list-modal-title"></p>
+            <button class="delete" aria-label="close" onclick="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="content">
+                <div class="tab-search">
+                    <div class="field has-addons" style="justify-content: center;">
+                        <p class="control">
+                          <span class="select">
+                            <select id="select-search" onchange="searchTable()">
+                                <option value="last_name">Nom</option>
+                                <option value="first_name">Prénom</option>
+                                <option value="nickname">Surnom</option>
+                                <option value="status">Statut</option>
+                            </select>
+                          </span>
+                        </p>
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" id="input-search" type="text" placeholder="Recherche..." onkeyup="searchTable()">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-search"></i>
+                            </span>
+                        </p>
+                    </div>            
+                </div>
+                
+                    <table class="table is-hoverable is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Surnom</th>
+                                <th>H obligatoires</th>
+                                <th>H supplémentaires</th>
+                                <th>Statut</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-unused">
+                        </tbody>
+                    </table>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button" onclick="closeModals()">Fermer</button>
+        </footer>
+        </div>
+    </div>
     <input type="hidden" id="formation-id" value="<%= formation._id %>">
     <div class="has-text-centered"><h2 class="title pointer" id="root-table"></h2></div>
     <div class="tables table-container tables-content"></div>

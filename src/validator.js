@@ -60,7 +60,12 @@ exports.statusRequest = [
         }).withMessage("L'heure minimum supplémentaire doit être supèrieure ou égale à 0")
         .custom((min, {req}) => {
             return parseFloat(min) <= parseFloat(req.body.max_additional_hour)
-        }).withMessage("L'heure minimum supplémentaire doit être infèrieure ou égale à l'heure maximum"),  
+        }).withMessage("L'heure minimum supplémentaire doit être infèrieure ou égale à l'heure maximum"),
+    check('algorithm')
+        .notEmpty().withMessage("algorithme requis")
+        .custom((algorithm, {req}) => {
+            return algorithm.toString() === "1" || algorithm.toString() === "2";
+        }).withMessage("algorithme requis"),
 ];
 
 exports.projectRequest = [

@@ -26,7 +26,7 @@ i{
 .fa-graduation-cap{
     color: $graduation-color;
 }
-.fa-project-diagram{
+.fa-network-wired{
     color: $decomposition-color;
 }
 .fa-user{
@@ -319,9 +319,13 @@ input[type=number] {
         width: 100%;
         margin : 0 !important;
         td{
+            background-clip: padding-box !important;
             text-align: center;
             vertical-align: middle;
             position: relative;
+            button{
+                padding: 0 5px !important;
+            }
             .table-btn{
                 position: absolute;
                 top: 50%;
@@ -329,6 +333,22 @@ input[type=number] {
                 left: 0;
                 
             }
+            .add-btn-bottom{
+                position: absolute;
+                bottom: 5px;
+                transform: translateX(-50%);
+                left: 50%;
+                
+            }
+        }
+        td[contenteditable="true"]{
+            background-color: #f6f6f6;
+            &:focus{
+                border: 1.5px solid black !important;
+            }
+        }
+        td[class="modification"][contenteditable="true"]{
+            background-color: #b3ddff;
         }
         .td-period{
             font-weight: bold;
@@ -347,6 +367,10 @@ input[type=number] {
         .td-border-bottom{
             border-bottom: 2px solid black !important;
         }
+        .td-unable{
+            cursor: not-allowed;
+            background-color: #b4b4b4;
+        }
         
     }
 }
@@ -354,5 +378,15 @@ input[type=number] {
     cursor: pointer;
     &:hover{
         background-color: #0aceaf7d !important;
+    }
+}
+
+#bilan-container {
+    table{
+        margin-top: 50px !important;
+        td{
+            border-color: #dbdbdb !important;
+        }
+        
     }
 }

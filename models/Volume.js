@@ -7,6 +7,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 let volumeSchema = new Schema({
     pedagogical_element: { type: Schema.Types.ObjectId, ref: 'PedagogicalElement' },
+    speaker: { type: Schema.Types.ObjectId, ref: 'Speaker' },
 },{ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 let Volume = mongoose.model('Volume', volumeSchema);
 
@@ -22,7 +23,6 @@ let weeklyVolumeSchema = new Schema({
 let WeeklyVolume = Volume.discriminator('WeeklyVolume', weeklyVolumeSchema);
 
 let globalVolumeSchema = new Schema({
-    speaker: { type: Schema.Types.ObjectId, ref: 'Speaker' },
     volume: {
         CM : Number,
         TP: Number,

@@ -1,0 +1,35 @@
+<% layout("template.ejs") %>
+    <input type="hidden" id="project-id" value="<%= project._id _%>">
+    <div class="text-content">
+        <div class="btn-center buttons">
+            <button class="button is-white" onclick="bilanSorter('all')">Tous</button>
+            <button class="button is-success" onclick="bilanSorter('success')">Bon</button>
+            <button class="button is-warning" onclick="bilanSorter('warning')">Sous service</button>
+            <button class="button is-danger" onclick="bilanSorter('danger')">Limite dépassée</button>
+        </div>
+        <div class="tab-search">
+            <div class="field has-addons" style="justify-content: center;">
+                <p class="control">
+                  <span class="select">
+                    <select id="select-search" onchange="searchBilan()">
+                        <option value="first-name">Prénom</option>
+                        <option value="last-name">Nom</option>
+                        <option value="nickname">Surnom</option>
+                        <option value="status">Statut</option>
+                    </select>
+                  </span>
+                </p>
+                <p class="control has-icons-left has-icons-right">
+                    <input class="input" id="input-search" type="text" placeholder="Recherche..." onkeyup="searchBilan()">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </p>
+            </div>            
+        </div>
+        <div id="bilan-container" class="tables-content">
+
+        </div>
+    </div>
+    <% block('script').append('<script src="/js/bilan.js"></script>') %>
+    

@@ -1,5 +1,5 @@
 <% layout("template.ejs") %>
-    <div id="delete-modal" class="modal">
+<div id="delete-modal" class="modal">
         <div class="modal-background" onclick="closeModals()"></div>
         <div class="modal-card">
         <header class="modal-card-head">
@@ -18,7 +18,42 @@
             <button class="button" onclick="closeModals()">Annuler</button>
         </footer>
         </div>
+</div>
+<div id="information-modal" class="modal">
+    <div class="modal-background" onclick="closeModals()"></div>
+    <div class="modal-card">
+    <header class="modal-card-head">
+        <p class="modal-card-title">Information: Algorithmes de calcul</p>
+        <button class="delete" aria-label="close" onclick="closeModals()"></button>
+    </header>
+    <section class="modal-card-body">
+        <div class="content">
+            <h6>Algorithme 1</h6>
+            <p> 
+                HeureTotal = 1.5*HeureCM + HeureTD + HeureTP
+                <br>Si (HeureTotal > service_dû) alors :
+                <ul>
+                    <li>HeureSupp = HeureTotal - service_dû</li>
+                </ul>
+            </p>
+            <h6>Algorithme 2</h6>
+            <p> 
+                HeureTotal = 1.5*HeureCM + HeureTD + HeureTP
+                <br>Si (HeureTotal > service_dû) alors :
+                <ul>
+                    <li>HeureMod = 1.5*HeureCM + HeureTD + HeureTP/1.5</li>
+                    <li>ratio = 1.0 - (service_dû/Htot)</li>
+                    <li>Heuresupp = HeureMod * ratio</li>
+                    <li>=> HeureSupp donne le volume d'heures considéré comme heures supplémentaires.</li>
+                </ul>
+            </p>
+        </div>
+    </section>
+    <footer class="modal-card-foot">
+        <button class="button" onclick="closeModals()">Fermer</button>
+    </footer>
     </div>
+</div>
     <div class="text-content">
         <h2 class="title has-text-centered">Liste des statuts</h2>
         <div class="btn-center">
@@ -34,6 +69,7 @@
                         <option value="nickname">Surnom</option>
                         <option value="mandatory_hour">H obligatoires</option>
                         <option value="addional_hour">H supplémentaires</option>
+                        <option value="algorithm">Algorithme</option>
                     </select>
                   </span>
                 </p>
@@ -53,6 +89,7 @@
                         <th>Surnom</th>
                         <th>H obligatoires</th>
                         <th>H supplémentaires</th>
+                        <th>Algorithme <span onclick="openInformationModal()" class="button-link"><i class="fas fa-info"></i></span></th>
                         <th>Nb d'enseignants</th>
                         <th>Actions</th>
                     </tr>
@@ -70,6 +107,7 @@
                                 Minimum: <%= status[i].min_additional_hour%><br>
                                 Maximum: <%= status[i].max_additional_hour%>                        
                             </td>
+                            <td data-search="algorithm">Algorithme <%= status[i].algorithm%></td>
                             <td><%= status[i].num_teachers%></td>
                             <td>
                                 <a href="/statuts/modifier/<%= status[i]._id _%>" title="Modifier"><i class="fas fa-edit"></i></a>

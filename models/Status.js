@@ -10,7 +10,8 @@ let statusSchema = new Schema({
     min_mandatory_hour: Number,
     max_mandatory_hour : Number,
     min_additional_hour: Number,
-    max_additional_hour: Number
+    max_additional_hour: Number,
+    algorithm: Number
 },{ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 statusSchema.virtual('num_teachers', {
     ref: 'Teacher',

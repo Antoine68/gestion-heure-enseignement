@@ -1,4 +1,39 @@
 <% layout("template.ejs") %>
+<div id="information-modal" class="modal">
+    <div class="modal-background" onclick="closeModals()"></div>
+    <div class="modal-card">
+    <header class="modal-card-head">
+        <p class="modal-card-title">Information: Algorithmes de calcul</p>
+        <button class="delete" aria-label="close" onclick="closeModals()"></button>
+    </header>
+    <section class="modal-card-body">
+        <div class="content">
+            <h6>Algorithme 1</h6>
+            <p> 
+                HeureTotal = 1.5*HeureCM + HeureTD + HeureTP
+                <br>Si (HeureTotal > service_dû) alors :
+                <ul>
+                    <li>HeureSupp = HeureTotal - service_dû</li>
+                </ul>
+            </p>
+            <h6>Algorithme 2</h6>
+            <p> 
+                HeureTotal = 1.5*HeureCM + HeureTD + HeureTP
+                <br>Si (HeureTotal > service_dû) alors :
+                <ul>
+                    <li>HeureMod = 1.5*HeureCM + HeureTD + HeureTP/1.5</li>
+                    <li>ratio = 1.0 - (service_dû/Htot)</li>
+                    <li>Heuresupp = HeureMod * ratio</li>
+                    <li>=> HeureSupp donne le volume d'heures considéré comme heures supplémentaires.</li>
+                </ul>
+            </p>
+        </div>
+    </section>
+    <footer class="modal-card-foot">
+        <button class="button" onclick="closeModals()">Fermer</button>
+    </footer>
+    </div>
+</div>
     <div class="text-content">
         <% if (typeof errors !== "undefined") { %>
             <article class="message is-danger">
@@ -81,6 +116,21 @@
                     </div>
                 </div>
             </div>
+            <div class="field">
+                <label for="algorithm">Algorithme de calcul des heures <span onclick="openInformationModal()" class="button-link"><i class="fas fa-info"></i></span></label>
+                <div class="control has-icons-left">
+                    <div class="select">
+                      <select id="algorithm" name="algorithm">
+                          <option value="0">Choisir</option>
+                          <option value="1" <% if(typeof old !== "undefined" && old.algorithm.toString() === "1" ){ %> <%= "selected" _%> <% }else if(typeof status !== "undefined" && status.algorithm.toString() === "1" ){ %> <%= "selected" _%> <% } %>>Algorithme 1</option>
+                          <option value="2" <% if(typeof old !== "undefined" && old.algorithm.toString() === "2" ){ %> <%= "selected" _%> <% }else if(typeof status !== "undefined" && status.algorithm.toString() === "2"){ %> <%= "selected" _%> <% } %>>Algorithme 2</option>
+                      </select>
+                    </div>
+                    <span class="icon is-left">
+                      <i class="fas fa-list"></i>
+                    </span>
+                  </div>
+              </div>
             <div class="field is-grouped is-grouped-centered" style="margin-top: 30px;">
                 <p class="control">
                     <a href="/statuts" class="button is-light">Annuler</a>

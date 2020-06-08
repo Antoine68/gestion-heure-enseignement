@@ -59,6 +59,8 @@ router.put('/projets/store', validator.projectRequest, projectController.store);
 router.put('/projets/edit/:id', validator.projectRequest, projectController.edit);
 router.post('/projets/archivate/:id', projectController.archivate);
 router.post('/projets/restore/:id', projectController.restore);
+router.get('/projets/:id/bilan', projectController.renderPageBilan);
+router.get('/projets/:id/calculer-bilan', projectController.calculateBilan);
 
 //Speaker
 const speakerController = require('../controllers/speakerController');
@@ -77,6 +79,7 @@ router.put('/projets/:idProject/formation/store', validator.addFormationRequest,
 router.put('/projets/:idProject/formation/edit/:id', validator.editFormationRequest, formationController.edit);
 router.delete('/formation/delete/:id', formationController.delete);
 router.get('/formation/:id/element/:idElement/modifier', formationController.formEditElement);
+router.put('/formation/:id/element/:idElement/edit', formationController.editElement);
 router.get('/formation/:id/element/ajouter/parent/:idParent', formationController.formAddElement);
 router.put('/formation/:id/element/store', formationController.storeElement);
 router.put('/formation/:id/periode/store', formationController.storePeriod);
@@ -85,15 +88,17 @@ router.get('/formations/:id/elements', formationController.listElements);
 
 //Volume
 const volumeController = require('../controllers/volumeController');
-router.get('/formations/:idFormation/elements/:idElement/modifier-volumes', volumeController.formEdit);
 //Ajax
 router.get('/elements/:idElement/initialiser', volumeController.initialize);
 router.get('/elements/:idElement/volumes', volumeController.getVolumes);
-router.put('/elements/:idElement/modifier-volumes-hebdomadaires', volumeController.editWeeklyVolume);
-router.put('/elements/:idElement/modifier-groupes-enseignants', volumeController.editGroupTeacher);
+router.put('/elements/hebdomadaire/:idElement/modifier', volumeController.editWeeklyVolume);
+router.put('/periodes/:idPeriod/elements/global/modifier', volumeController.editGlobalVolume);
 router.post('/elements/:idElement/ajouter-intervenant', volumeController.addSpeaker);
 router.post('/elements/:idElement/retirer-intervenant', volumeController.removeSpeaker);
 router.get('/elements/:idElement/interventions', volumeController.getListsSpeakers);
+router.get('/formations/:idFormation/periodes/:idPeriod/saisies-globales', volumeController.getAllGlobalsByPeriod);
+router.get('/formations/:idFormation/elements/:idElement/get', volumeController.getElement);
+
 
 
 

@@ -14,6 +14,11 @@ function openListTeachersModal(){
     listModal.classList.add("is-active"); 
 }
 
+function openInformationModal(){
+    let listModal = document.getElementById("information-modal");
+    listModal.classList.add("is-active"); 
+}
+
 function closeModals(){
     let modals = document.getElementsByClassName("modal");
     for(let i=0; i<modals.length; i++){
