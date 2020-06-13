@@ -167,6 +167,9 @@ footer{
         @extend .is-danger ;
         border: 3px solid #cc0f35;
     }
+    ul {
+        list-style: disc;
+    }
 }
 
 input::-webkit-outer-spin-button,

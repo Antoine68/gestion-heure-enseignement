@@ -91,6 +91,10 @@ function hideShowSubFolder(idFolder){
 }
 
 function showNotification(type, message, timer = true){
+    let notifications = document.getElementsByClassName("notification-container");
+    while(notifications[0]) {
+        notifications[0].parentNode.removeChild(notifications[0]);
+    }
     let body = document.getElementsByTagName("body")[0];
     let notificationContainer = document.createElement("div");
     notificationContainer.setAttribute("class", "notification-container");

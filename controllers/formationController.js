@@ -62,7 +62,6 @@ exports.store = (req, res) => {
                 rootPedagogicalElement = new PedagogicalElement({
                     formation : formation,
                     project: idProject,
-                    input_type: "aucun",
                     buildingElement: root,
                 });
                 rootPedagogicalElement.save(function(){
@@ -74,26 +73,7 @@ exports.store = (req, res) => {
                                 buildingElement: period._id,
                                 order: period.order,
                                 project: idProject,
-                                input_type: "aucun",
                                 week: 1,
-                                forfait : {
-                                    TP: 0,
-                                    TD: 0,
-                                    CM: 0,
-                                    PARTIEL: 0
-                                },
-                                number_groups : {
-                                    TP: 1,
-                                    TD: 1,
-                                    CM: 1,
-                                    PARTIEL: 1
-                                },
-                                courses_types: {
-                                    TP: true,
-                                    TD: true,
-                                    CM: true,
-                                    PARTIEL: true
-                                }
                             });
                             pedagogicalPeriod.parent = rootPedagogicalElement;
                             let promise = pedagogicalPeriod.save();
@@ -121,25 +101,6 @@ function copyBuildingElement(parent, buildingElement){
         buildingElement: buildingElement._id,
         order: buildingElement.order,
         project: parent.project,
-        input_type: "aucun",
-        forfait : {
-            TP: 0,
-            TD: 0,
-            CM: 0,
-            PARTIEL: 0
-        },
-        number_groups : {
-            TP: 1,
-            TD: 1,
-            CM: 1,
-            PARTIEL: 1
-        },
-        courses_types: {
-            TP: true,
-            TD: true,
-            CM: true,
-            PARTIEL: true
-        }
     });
     pedagogicalElement.parent = parent;
     let promise = pedagogicalElement.save();
@@ -307,46 +268,29 @@ exports.storeElement = (req, res) => {
                 TD: req.body.td_hour,
                 CM: req.body.cm_hour,
             },
-            forfait : {
-                TP: 0,
-                TD: 0,
-                CM: 0,
-                PARTIEL: 0
-            },
             number_groups : {
                 TP: req.body.tp_groups,
                 TD: req.body.td_groups,
                 CM: req.body.cm_groups,
                 PARTIEL: req.body.partiel_groups
             },
-            courses_types: {
-                TP: true,
-                TD: true,
-                CM: true,
-                PARTIEL: true
-            }
         });
         element.parent = req.body.parent;
-        if(req.body.input_type === "hebdomadaire") {
+        if(req.body.input_type !== "aucun") {
             element.courses_types = {
-                TP: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("TP") ,
-                TD: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("TD") ,
-                CM: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("CM") ,
-                PARTIEL: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("PARTIEL") 
+                TP: typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("TP") ,
+                TD: typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("TD") ,
+                CM: typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("CM") ,
+                PARTIEL: typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("PARTIEL") 
             }
 
-        }else if(req.body.input_type === "global") {
-            element.courses_types = {
-                TP: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("TP") ,
-                TD: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("TD") ,
-                CM: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("CM") ,
-                PARTIEL: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("PARTIEL") 
-            };
+        }
+        if(req.body.input_type === "global") {
             element.forfait = {
-                TP: req.body.tp_forfait,
-                TD: req.body.td_forfait,
-                CM: req.body.cm_forfait,
-                PARTIEL: req.body.partiel_forfait
+                TP: req.body.tp_forfait || 0,
+                TD: req.body.td_forfait || 0,
+                CM: req.body.cm_forfait || 0,
+                PARTIEL: req.body.partiel_forfait || 0
             };
         }
         element.save(function(error){
@@ -366,14 +310,7 @@ exports.storePeriod = (req, res) => {
             reference: req.body.reference,
             order: req.body.order,
             project: formation.project,
-            input_type: "aucun",
             week: req.body.week,
-            forfait : {
-                TP: 0,
-                TD: 0,
-                CM: 0,
-                PARTIEL: 0
-            },
             hour_volume: {
                 TP: req.body.tp_hour,
                 TD: req.body.td_hour,
@@ -385,12 +322,6 @@ exports.storePeriod = (req, res) => {
                 CM: req.body.cm_groups,
                 PARTIEL: req.body.partiel_groups
             },
-            courses_types: {
-                TP: true,
-                TD: true,
-                CM: true,
-                PARTIEL: true
-            }
         });
         period.parent = formation.element;
         period.save(function(error){
@@ -448,16 +379,16 @@ exports.editElement = (req, res) => {
                     PARTIEL: req.body.partiel_forfait || 0
                 },
                 number_groups : {
-                    TP: req.body.tp_groups,
-                    TD: req.body.td_groups,
-                    CM: req.body.cm_groups,
-                    PARTIEL: req.body.partiel_groups
+                    TP: (typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("TP")) ? req.body.tp_groups : 0,
+                    TD: (typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("TD")) ? req.body.td_groups : 0,
+                    CM: (typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("CM")) ? req.body.cm_groups : 0,
+                    PARTIEL: (typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("PARTIEL")) ? req.body.partiel_groups : 0
                 },
                 courses_types: {
-                    TP: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("TP") ,
-                    TD: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("TD") ,
-                    CM: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("CM") ,
-                    PARTIEL: typeof req.body.courses_types !== "undefinded" && req.body.courses_types.includes("PARTIEL") 
+                    TP: typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("TP") ,
+                    TD: typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("TD") ,
+                    CM: typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("CM") ,
+                    PARTIEL: typeof req.body.courses_types !== "undefined" && req.body.courses_types.includes("PARTIEL") 
                 }
             }
             if(element.input_type !== req.body.input_type){

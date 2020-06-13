@@ -9644,6 +9644,9 @@ footer {
 .notification-container .notification-fail {
   border: 3px solid #cc0f35;
 }
+.notification-container ul {
+  list-style: disc;
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

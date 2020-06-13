@@ -12,25 +12,25 @@ let pedagogicalElementSchema = new Schema({
     formation : { type: Schema.Types.ObjectId, ref: 'Formation' },
     project : {type: Schema.Types.ObjectId, ref: 'Project'},
     buildingElement: { type: Schema.Types.ObjectId, ref: 'BuildingElement' },
-    input_type: String,
+    input_type: {type: String, default: "aucun"},
     order: Number,
     forfait : {
-        TP: Number,
-        TD: Number,
-        CM: Number,
-        PARTIEL: Number
+        TP: {type: Number, default: 0},
+        TD: {type: Number, default: 0},
+        CM: {type: Number, default: 0},
+        PARTIEL: {type: Number, default: 0}
     },
     number_groups : {
-        TP: Number,
-        TD: Number,
-        CM: Number,
-        PARTIEL: Number
+        TP: {type: Number, default: 1},
+        TD: {type: Number, default: 1},
+        CM: {type: Number, default: 1},
+        PARTIEL: {type: Number, default: 1}
     },
     courses_types: {
-        TP: Boolean,
-        TD: Boolean,
-        CM: Boolean,
-        PARTIEL: Boolean
+        TP: {type: Boolean, default: true},
+        TD: {type: Boolean, default: true},
+        CM: {type: Boolean, default: true},
+        PARTIEL: {type: Boolean, default: true}
     },
     hour_volume: {
         CM : Number,

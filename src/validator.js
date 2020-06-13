@@ -178,3 +178,113 @@ exports.editFormationRequest = [
     check('nickname')
         .notEmpty().withMessage("surnom requis")
 ];
+
+exports.editWeeklyElementRequest = [
+    check('volumes')
+        .notEmpty().isArray().withMessage("volumes requis")
+        .custom((volumes, {req}) => {
+            let PedagogicalElement = require('../models/PedagogicalElement');
+            return PedagogicalElement.findOne({_id: req.params.idElement, input_type: "hebdomadaire"}).then(element =>{
+                if(element === null){
+                    return Promise.reject('L\'élément n\'est pas valide');
+                }else {
+                    let getPeriod = element.getAncestors({__t: 'PedagogicalPeriod'});
+                    let getWeek = getPeriod.then(elements => {
+                        let period = elements[0];
+                        return period.week;
+                    }).catch(error => { throw error});
+                    return getWeek.then(week => {
+                        for(let volume of volumes) {
+                            if(isNaN(volume.week) || parseInt(volume.week) < 1 || parseInt(volume.week) > week){
+                                return Promise.reject('Numéro de semaine (' + volume.week + ') invailde');
+                            }
+                            for(let key in volume.courses_types){
+                                if(element.courses_types[key]){
+                                    if(isNaN(volume.courses_types[key]) || parseFloat(volume.courses_types[key]) < 0.0 || parseFloat(volume.courses_types[key]) > 50.0){
+                                        return Promise.reject('Le volume d\'heures doit être compris entre 0.0 et 50.0');
+                                    }
+                                } else {
+                                    return Promise.reject('Type de cours non autorisé pour cet élément (' + key + ')');
+                                }
+                            }
+                        }
+                        return Promise.resolve();
+                    });
+                }
+            });
+        }),
+    check('speakers')
+        .isArray().withMessage("intervenants requis")
+        .custom((speakers, {req}) => {
+            let PedagogicalElement = require('../models/PedagogicalElement');
+            return PedagogicalElement.findOne({_id: req.params.idElement, input_type: "hebdomadaire"}).then(element =>{
+                if(element === null){
+                    return Promise.reject('L\'élément n\'est pas valide');
+                }else {
+                    let getPeriod = element.getAncestors({__t: 'PedagogicalPeriod'});
+                    let getWeek = getPeriod.then(elements => {
+                        let period = elements[0];
+                        return period.week;
+                    }).catch(error => { throw error});
+                    return getWeek.then(week => {
+                        for(let speaker of speakers) {
+                            if(!element.interventions.includes(speaker.id)){
+                                return Promise.reject('Un ou plusieurs intervenants n\'interviennent pas dans cet élément');
+                            }
+                            for(let group of speaker.groups){
+                                if(isNaN(group.week) || parseInt(group.week) < 1 || parseInt(group.week) > week){
+                                    return Promise.reject('Numéro de semaine (' + group.week + ') invailde');
+                                }
+                                for(let key in group.courses_types){
+                                    if(element.courses_types[key]){
+                                        if(isNaN(group.courses_types[key]) || parseInt(group.courses_types[key]) < 0 || parseFloat(group.courses_types[key]) > element.number_groups[key]){
+                                            return Promise.reject('Le nombre de groupes des intervenants doit être compris entre 0 et ' + element.number_groups[key] + ' pour le type de cours: ' + key);
+                                        }
+                                    } else {
+                                        return Promise.reject('Type de cours non autorisé pour cet élément (' + key + ')');
+                                    }
+                                }
+
+                            }
+                        }
+                        return Promise.resolve();
+                    });
+                }
+            });
+        }),
+];
+
+exports.editGlobalsElementsRequest = [
+    check("subjects")
+        .notEmpty().isArray().withMessage("Matières requises")
+        .custom((subjects, {req} ) => {
+            let PedagogicalElement = require('../models/PedagogicalElement');
+            return PedagogicalElement.findOne({_id: req.params.idPeriod , __t:"PedagogicalPeriod"}).then(period => {
+                let getGloabalsElements = period.getChildren({input_type: "global"}, {}, {}, true);
+                return getGloabalsElements.then(globalsElements => {
+                    for(let subject of subjects) {
+                        let element = globalsElements.find(g => g._id.toString() === subject.id.toString());
+                        if(typeof element === "undefined") {
+                            return Promise.reject('Element global introuvable pour cette période');
+                        }
+                        for(let speaker of subject.speakers){
+                            if(!element.interventions.includes(speaker.id)) {
+                                return Promise.reject('Un ou plusieurs intervenants n\'interviennent pas dans un élément');
+                            }
+                            for(let key in speaker.courses_types){
+                                if(element.courses_types[key]){
+                                    if(isNaN(speaker.courses_types[key]) || parseFloat(speaker.courses_types[key]) < 0.0 || parseFloat(speaker.courses_types[key]) > 50.0){
+                                        return Promise.reject('Le volume d\'heures doit être compris entre 0.0 et 50.0');
+                                    }
+                                } else {
+                                    return Promise.reject('Type de cours non autorisé pour un élément (' + key + ')');
+                                }
+                            }
+
+                        }
+                    }
+                    return Promise.resolve();
+                })
+            })
+        })
+];

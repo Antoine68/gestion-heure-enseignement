@@ -91,8 +91,8 @@ const volumeController = require('../controllers/volumeController');
 //Ajax
 router.get('/elements/:idElement/initialiser', volumeController.initialize);
 router.get('/elements/:idElement/volumes', volumeController.getVolumes);
-router.put('/elements/hebdomadaire/:idElement/modifier', volumeController.editWeeklyVolume);
-router.put('/periodes/:idPeriod/elements/global/modifier', volumeController.editGlobalVolume);
+router.put('/elements/hebdomadaire/:idElement/modifier', validator.editWeeklyElementRequest, volumeController.editWeeklyVolume);
+router.put('/periodes/:idPeriod/elements/global/modifier', validator.editGlobalsElementsRequest, volumeController.editGlobalVolume);
 router.post('/elements/:idElement/ajouter-intervenant', volumeController.addSpeaker);
 router.post('/elements/:idElement/retirer-intervenant', volumeController.removeSpeaker);
 router.get('/elements/:idElement/interventions', volumeController.getListsSpeakers);

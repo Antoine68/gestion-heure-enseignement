@@ -8,11 +8,12 @@ let PedagogicalElement = require('../models/PedagogicalElement');
 let {Volume, WeeklyVolume, GlobalVolume} = require('../models/Volume');
 let GroupTeacher = require('../models/GroupTeacher');
 let Promise = require('bluebird');
+let mongoose = require('mongoose');
 
 
 
 exports.renderPage = (req, res) => {
-    Project.find({archived: false}).populate('formations').sort([['start_date', -1]]).then(projects => {
+    Project.find({archived: false}).populate('formations').sort([['start_year', -1]]).then(projects => {
         res.render("project/index", { "title": "Projets", projects: projects });
     });
 }
@@ -154,10 +155,14 @@ function calculateAlgorithm2(dataSpeaker){
 
 
 exports.formAdd = (req, res, next) => {
-    res.render("project/add_edit", {
-        title: "Ajouter un projet",
-        action: "/projets/store"
-    });
+    Project.find({}).then(projects => {
+        res.render("project/add_edit", {
+            title: "Ajouter un projet",
+            action: "/projets/store",
+            duplicateProjects: projects,
+        });
+    })
+    
 }
 
 exports.formEdit = (req, res, next) => {
@@ -174,22 +179,132 @@ exports.formEdit = (req, res, next) => {
 exports.store = (req, res, next) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).render("project/add_edit", {
-            title: "Ajouter un projet",
-            action: "/projets/store",
-            errors: errors.array(), 
-            old: req.body
+        Project.find({}).then(projects => {
+            res.status(422).render("project/add_edit", {
+                title: "Ajouter un projet",
+                action: "/projets/store",
+                duplicateProjects: projects,
+                errors: errors.array(), 
+                old: req.body
+            });
+        })
+    }else {
+        let newProject = new Project({
+            title:  req.body.title,
+            start_year: req.body.start_year,
+            end_year: req.body.end_year,
+        });
+        newProject.save(function (error) {
+            if (error) {res.status(404).json({error})}
+            if(req.body.duplicate_project !== "null"){
+                let duplicate_groups = false;
+                if(typeof req.body.duplicate_groups !== "undefined") {
+                    duplicate_groups = true;
+                }
+                Project.findOne({_id: req.body.duplicate_project}).populate({path: "speakers formations", populate: { path: 'element' }}).then(project => {
+                    duplicateSpeakers(project.speakers, newProject).then(newSpeakers => {
+                        duplicateFormations(project.formations, newSpeakers, newProject, duplicate_groups).then(res.redirect('/projets'));
+                    })
+                        
+                })
+            } else{
+                res.redirect('/projets');
+            }
         });
     }
-    let project = new Project({
-        title:  req.body.title,
-        start_year: req.body.start_year,
-        end_year: req.body.end_year,
+   
+}
+
+async function duplicateSpeakers(speakers, newProject) {
+    let newSpeakers = [];
+    for (let speaker of speakers) {
+        let newSpeaker = speaker;
+        newSpeaker._id = mongoose.Types.ObjectId();
+        newSpeaker.isNew = true;
+        newSpeaker.project = newProject._id;
+        await newSpeaker.save(function() {
+            newSpeakers.push(newSpeaker);
+        });
+    }
+    return newSpeakers;
+}
+
+async function duplicateFormations(formations, newSpeakers, newProject, duplicate_groups) {
+    for (let formation of formations) {
+        let newFormation = formation;
+        newFormation._id = mongoose.Types.ObjectId();
+        newFormation.isNew = true;
+        newFormation.project = newProject._id;
+        await newFormation.save(async function() {
+            let root = formation.element;
+            await root.getChildrenTree({options:{populate:{path:'volumes groups_teachers interventions', populate: { path: 'teacher' }}}}, async function(err, periods){
+                let newRoot = formation.element;
+                newRoot._id = mongoose.Types.ObjectId();
+                newRoot.isNew = true;
+                newRoot.formation = newFormation._id;
+                await newRoot.save(async function() {
+                    for(let period of periods){
+                        await duplicateElement(period, newRoot, newSpeakers, newProject, duplicate_groups);
+                    }
+                })
+            })
+        });
+    }
+}
+
+async function duplicateElement(element, newParent, newSpeakers, newProject, duplicate_groups) {
+    let newElement = new PedagogicalElement({
+        title: element.title,
+        nickname: element.nickname,
+        reference: element.reference,
+        buildingElement:  element.buildingElement,
+        __t: element.__t,
+        week: element.week,
+        forfait: element.forfait,
+        courses_types: element.courses_types,
+        input_type: element.input_type,
+        order: element.order, 
+        project: newProject._id
     });
-    project.save(function (error) {
-        if (error) {res.status(404).json({error})}
-        res.redirect('/projets');
-    });
+    newElement.parent = newParent._id;
+    await newElement.save(async function(){
+        for(let intervention of element.interventions) {
+            let i = newSpeakers.find(s => s.teacher.toString() === intervention.teacher._id.toString());
+            if(typeof i !== "undefined") {
+                newElement.interventions.push(i._id);
+                await newElement.save();
+            }
+        }
+        if(newElement.input_type === "hebdomadaire") {
+            await WeeklyVolume.find({pedagogical_element: element._id}).then(async (weeklyVolumes) => {
+                for(let volume of weeklyVolumes) {
+                    let newVolume = volume;
+                    newVolume._id = mongoose.Types.ObjectId();
+                    newVolume.isNew = true;
+                    newVolume.pedagogical_element = newElement._id;
+                    await newVolume.save();
+                }
+            })
+            if(duplicate_groups) {
+                await GroupTeacher.find({pedagogical_element: element._id}).populate("speaker").then(async (groups) => {
+                    for(let group of groups) {
+                        let s = newSpeakers.find(s => group.speaker.teacher.toString() === s.teacher._id.toString());
+                        if(typeof s !== "undefined") {
+                            let newGroup = group;
+                            newGroup._id = mongoose.Types.ObjectId();
+                            newGroup.isNew = true;
+                            newGroup.pedagogical_element = newElement._id;
+                            newGroup.speaker = s._id;
+                            await newGroup.save();
+                        }
+                    }
+                })
+            }
+        }
+        for(let children of element.children) {
+            await duplicateElement(children, newElement, newSpeakers, newProject, duplicate_groups);
+        }
+    })
 }
 
 exports.edit = (req, res, next) => {

@@ -48,6 +48,28 @@
                     </div>
                 </div>
             </div>
+            <% if(typeof duplicateProjects !== "undefined" && typeof project === "undefined"){ %>
+                <div class="field">
+                    <label class="label" for="duplicate_project">Dupliquer un projet</label>
+                    <div class="control has-icons-left">
+                        <div class="select">
+                          <select id="duplicate_project" name="duplicate_project">
+                            <option value="null">Aucun</option>
+                            <% for (let i=0; i < duplicateProjects.length; i++) { %>	
+                            <option value="<%= duplicateProjects[i]._id %>" <% if(typeof old !== "undefined" && old.duplicate_project === duplicateProjects[i]._id.toString() ){ %> <%= "selected" _%> <%}%>><%= duplicateProjects[i].title %></option>
+                            <%}%>
+                          </select>
+                        </div>
+                        <span class="icon is-left">
+                          <i class="fas fa-list"></i>
+                        </span>
+                    </div>
+                    <label class="checkbox">
+                        <input type="checkbox" id="duplicate_groups" name="duplicate_groups" <% if(typeof old !== "undefined" && typeof old.duplicate_groups !== "undefined"){ %> <%= "checked" %> <%}%>>
+                        Conserver les nombres de groupes associés aux intervenants (saisies hebomadaires)
+                    </label>
+                </div>
+            <%}%> 
             <div class="field is-grouped is-grouped-centered" style="margin-top: 30px;">
                 <p class="control">
                     <a href="/projets" class="button is-light">Annuler</a>

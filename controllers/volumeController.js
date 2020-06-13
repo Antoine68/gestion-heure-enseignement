@@ -83,6 +83,10 @@ exports.getVolumes = (req, res, next) => {
 }
 
 exports.editWeeklyVolume = (req, res, next) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(403).json({errors});
+    }
     let idElement = req.params.idElement;
     let requestVolumes = req.body.volumes;
     let requestSpeakers = req.body.speakers;
@@ -125,7 +129,11 @@ exports.editWeeklyVolume = (req, res, next) => {
 }
 
 exports.editGlobalVolume = (req, res, next) => {
-    let subjects = req.body;
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(403).json({errors});
+    }
+    let subjects = req.body.subjects;
     elementCounter = 0;
     for(let subject of subjects) {
         PedagogicalElement.findOne({_id: subject.id, input_type:"global"}).then(element => {
