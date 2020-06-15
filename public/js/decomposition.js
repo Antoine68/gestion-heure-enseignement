@@ -52,7 +52,7 @@ function manageElementClick(evt) {
     let element = span.param;
     let modal = document.getElementById("element-modal");
     let content = modal.getElementsByClassName("content")[0];
-    content.innerHTML = "<p>Titre: "+element.title+"</p><p>Surnom: "+element.nickname+"</p><p>Reference: "+element.reference+"</p><p>Ordre: "+ element.order+ "</p>";
+    content.innerHTML = "<p>Titre: "+element.title+"</p><p>Surnom: "+ (element.nickname ? element.nickname : "non défini") +"</p><p>Reference: "+ (element.reference ? element.reference : "non défini") +"</p><p>Ordre: "+ (element.order ? element.order : "non défini")+ "</p>";
     if(typeof element.hour_volume !== "undefined") {
         if(element.hour_volume.TP !== null || element.hour_volume.TD !== null || element.hour_volume.CM !== null) {
             content.innerHTML += "<label>Volume d'heures prévu : <label>";

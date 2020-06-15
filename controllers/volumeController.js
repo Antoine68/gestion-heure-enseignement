@@ -12,7 +12,7 @@ let { validationResult } = require('express-validator');
 exports.getAllGlobalsByPeriod = (req, res, next) => {
     let idPeriod = req.params.idPeriod;
     PedagogicalElement.findOne({_id: idPeriod, __t: "PedagogicalPeriod"}).then(period => {
-        period.getChildren({input_type: "global"},{},{populate:{path:'volumes interventions', populate: { path: 'teacher'}}},true, function(err, globals){
+        period.getChildren({input_type: "global"},{},{populate:{path:'buildingElement volumes interventions', populate: { path: 'teacher'}}},true, function(err, globals){
             let formatedGlobals = concateneGlobals(globals);
             res.status(200).json({
                 period: period,
