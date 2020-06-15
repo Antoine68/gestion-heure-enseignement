@@ -155,7 +155,7 @@ function calculateAlgorithm2(dataSpeaker){
 
 
 exports.formAdd = (req, res, next) => {
-    Project.find({}).then(projects => {
+    Project.find({}).sort([["start_year", -1]]).then(projects => {
         res.render("project/add_edit", {
             title: "Ajouter un projet",
             action: "/projets/store",

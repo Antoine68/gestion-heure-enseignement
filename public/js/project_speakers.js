@@ -136,7 +136,7 @@ function manageTextTr(tr){
     buttonRemove.title = "Retirer";
     buttonRemove.innerHTML = "<i class='fas fa-minus'></i>";
     buttonRemove.addEventListener("click", function() {
-        removeUsedTeacher(data._id);
+        openModalRemove(data._id);
     });
     tdActions.appendChild(buttonEdit);
     tdActions.appendChild(buttonRemove);
@@ -243,6 +243,21 @@ function populateUnusedTable(data){
         tbody.appendChild(tr);
         
     }  
+}
+
+function openModalRemove(idSpeaker) {
+    let modal = document.getElementById("remove-modal");
+    let buttonContainer = document.getElementById("button-remove-container");
+    let button = document.createElement("button");
+    button.addEventListener("click", function() {
+        removeUsedTeacher(idSpeaker);
+        closeModals();
+    });
+    button.setAttribute("class", "button is-primary")
+    button.innerHTML = "Retirer";
+    buttonContainer.innerHTML = "";
+    buttonContainer.appendChild(button);
+    modal.classList.add("is-active");
 }
 
 document.addEventListener("DOMContentLoaded", function(){

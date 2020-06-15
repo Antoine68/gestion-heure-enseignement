@@ -9843,6 +9843,10 @@ input[type=number] {
   border-color: #dbdbdb !important;
 }
 
+.fa-exclamation-triangle {
+  color: #e94040;
+}
+
 #section-login {
   background: linear-gradient(-20deg, #00cdac 0%, #8ddad5 100%);
   color: white;

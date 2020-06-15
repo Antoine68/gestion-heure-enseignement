@@ -1,4 +1,23 @@
 <% layout("template.ejs") %>
+<div id="remove-modal" class="modal">
+    <div class="modal-background" onclick="closeModals()"></div>
+    <div class="modal-card">
+    <header class="modal-card-head">
+        <p class="modal-card-title">Retirer un intervenant</p>
+        <button class="delete" aria-label="close" onclick="closeModals()"></button>
+    </header>
+    <section class="modal-card-body">
+        <div class="content">
+            <h6>Voulez-vous vraiment supprimer cet intervenant du projet ?</h6>
+            <p><i class="fas fa-exclamation-triangle"></i> Tous les volumes du projet liés à cet intervenant seront supprimés <i class="fas fa-exclamation-triangle"></i></p>
+        </div>
+    </section>
+    <footer class="modal-card-foot">
+        <div id="button-remove-container" style="margin-right: 5px;"></div>
+        <button class="button" onclick="closeModals()">Annuler</button>
+    </footer>
+    </div>
+</div>
 <div id="list-modal" class="modal">
     <div class="modal-background" onclick="closeModals()"></div>
     <div class="modal-card" style="width: max-content; max-width: 100%;">

@@ -2,6 +2,9 @@ let { validationResult } = require('express-validator');
 let Project = require('../models/Project');
 let Teacher = require('../models/Teacher');
 let Speaker = require('../models/Speaker');
+let {Volume, WeeklyVolume, GlobalVolume} = require('../models/Volume');
+let GroupTeacher = require('../models/GroupTeacher');
+let PedagogicalElement = require('../models/PedagogicalElement');
 
 
 exports.store = (req, res) => {
@@ -26,9 +29,17 @@ exports.store = (req, res) => {
 
 exports.remove = (req, res) => {
     let idSpeaker = req.params.id;
-    Speaker.deleteOne({_id: idSpeaker})
-        .then(obj => res.sendStatus(200))
-        .catch(error => res.status(404).json({error}));            
+    Speaker.deleteOne({_id: idSpeaker}).then(obj => {
+        Volume.deleteMany({speaker: idSpeaker}).then(obj => {
+            GroupTeacher.deleteMany({speaker: idSpeaker}).then(obj => {
+                PedagogicalElement.update({},{ $pull: { interventions: { $in: [ idSpeaker ] }}},{ multi: true }).then(obj => {
+                    res.sendStatus(200)
+                })
+                
+            })
+        })
+    })
+    .catch(error => res.status(404).json({error}));            
 }
 
 exports.edit = (req, res) => {

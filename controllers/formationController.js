@@ -139,17 +139,25 @@ exports.delete = (req, res, next) => {
     Formation.findOne({ _id : id}).populate("element")
     .then(formation => {
         let root = formation.element;
-        root.getChildren(true, function(err, childrens) {
-            for(let i=0; i<childrens.length; i++){
-                childrens[i].remove();
+        root.getChildren({},{},{populate:"volumes groups_teachers"}, true, async function(err, childrens) {
+            for(let i=0; i<childrens.length; i++) {
+                for(let j=0; j<childrens[i].volumes.length; j++) {
+                    await childrens[i].volumes[j].remove();
+                }
+                for(let j=0; j<childrens[i].groups_teachers.length; j++) {
+                    await childrens[i].groups_teachers[j].remove();
+                }
+                await childrens[i].remove();
             }
+            await root.remove();
+            await formation.remove();
+            res.redirect('/projets');
         });
-        root.remove();
-        formation.remove();
-        res.redirect('/projets');
     })
     .catch(error => res.status(404).json({error}));    
 }
+
+
 exports.renderPage = (req, res, next) => {
     let id = req.params.id;
     let idProject = req.params.idProject;
