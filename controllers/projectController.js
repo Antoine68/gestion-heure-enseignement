@@ -258,6 +258,7 @@ async function duplicateElement(element, newParent, newSpeakers, newProject, dup
         nickname: element.nickname,
         reference: element.reference,
         buildingElement:  element.buildingElement,
+        number_groups: element.number_groups,
         __t: element.__t,
         week: element.week,
         forfait: element.forfait,

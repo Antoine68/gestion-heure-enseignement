@@ -211,7 +211,7 @@ exports.getElement = (req, res, next) => {
             let period = periods[0];
             PedagogicalElement.findOne({_id: period._id, __t: 'PedagogicalPeriod'}).then(period => {
                 if(element.input_type === "global") {
-                    period.getChildren({input_type: "global"},{},{populate:{path:'volumes interventions', populate: { path: 'teacher'}}},true, function(err, globals){
+                    period.getChildren({input_type: "global"},{},{populate:{path:'buildingElement volumes interventions', populate: { path: 'teacher'}}},true, function(err, globals){
                         let formatedGlobals = concateneGlobals(globals);
                         res.status(200).json({
                             type: element.input_type,

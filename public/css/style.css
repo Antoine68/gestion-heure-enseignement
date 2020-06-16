@@ -9658,6 +9658,7 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+/* ARBRE DECOMPOSITION */
 .tree-container {
   display: flex;
   justify-content: center;

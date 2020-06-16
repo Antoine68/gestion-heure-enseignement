@@ -1,11 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const validator = require("./validator");
+const validator = require("../middlewares/validator");
 
-//User
-const userController = require('../controllers/userController');
-router.get('/login', userController.renderPageLogin);
-router.post('/login', validator.loginRequest, userController.login);
 
 //Home
 const homeController = require('../controllers/homeController');
