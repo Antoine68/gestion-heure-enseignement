@@ -3,9 +3,16 @@
 ## Commandes
 
 télécharger le projet : ```git clone https://gitlab.com/antoine.richard68/gestion-heure-enseignement```
+
+
 installer les dépendances : ```npm install```
+
+
 lancer l'application : ```npm start```
+
+
 ouvrir l'application : http://localhost:3000
+
 
 ## Contexte
 
@@ -27,16 +34,16 @@ Moteur de template **Ejs** et framework CSS **Bulma**.
 
 Menu principal :
 
-![menu-principal](imgs_readme\image-20201219162645274.png)
+![menu-principal](https://gitlab.com/antoine.richard68/gestion-heure-enseignement/-/tree/master/imgs_readme/image-20201219162645274.png)
 
 Affichage de la hiérarchie d'une formation :
 
-![hierarchie-formation](imgs_readme\image-20201219163505797.png)
+![hierarchie-formation](https://gitlab.com/antoine.richard68/gestion-heure-enseignement/-/tree/master/imgs_readme/image-20201219163505797.png)
 
 Saisie des heures pour une année dans une formation :
 
-![saisie-heure](imgs_readme\image-20201219163658835.png)
+![saisie-heure](https://gitlab.com/antoine.richard68/gestion-heure-enseignement/-/tree/master/imgs_readme/image-20201219163658835.png)
 
 Affichage d'un bilan d'une année :
 
-![affichage-bilan](imgs_readme\image-20201219163915398.png)
+![affichage-bilan](https://gitlab.com/antoine.richard68/gestion-heure-enseignement/-/tree/master/imgs_readme/image-20201219163915398.png)

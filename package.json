@@ -1,12 +1,12 @@
 {
-    "name": "projet",
+    "name": "project",
     "version": "1.0.0",
-    "description": "",
+    "description": "application de gestion des heures d'enseignement",
     "main": "index.js",
     "scripts": {
         "start": "nodemon src/index.js"
     },
-    "author": "",
+    "author": "antoine.richard68",
     "license": "ISC",
     "dependencies": {
         "bluebird": "^3.7.2",
