@@ -34,16 +34,16 @@ Moteur de template **Ejs** et framework CSS **Bulma**.
 
 Menu principal :
 
-![menu-principal](https://gitlab.com/antoine.richard68/gestion-heure-enseignement/-/tree/master/imgs_readme/image-20201219162645274.png)
+![menu-principal](/imgs_readme/image-20201219162645274.png?raw=true)
 
 Affichage de la hiérarchie d'une formation :
 
-![hierarchie-formation](https://gitlab.com/antoine.richard68/gestion-heure-enseignement/-/tree/master/imgs_readme/image-20201219163505797.png)
+![hierarchie-formation](/imgs_readme/image-20201219163505797.png?raw=true)
 
 Saisie des heures pour une année dans une formation :
 
-![saisie-heure](https://gitlab.com/antoine.richard68/gestion-heure-enseignement/-/tree/master/imgs_readme/image-20201219163658835.png)
+![saisie-heure](/imgs_readme/image-20201219163658835.png?raw=true)
 
 Affichage d'un bilan d'une année :
 
-![affichage-bilan](https://gitlab.com/antoine.richard68/gestion-heure-enseignement/-/tree/master/imgs_readme/image-20201219163915398.png)
+![affichage-bilan](/imgs_readme/image-20201219163915398.png?raw=true)
